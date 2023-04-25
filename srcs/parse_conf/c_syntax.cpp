@@ -6,7 +6,7 @@
  * @param str 
  * @return std::string 
  */
-std::string		c_syntax::trim_comments(const std::string &str) {
+std::string		c_syntax::trimComments(const std::string &str) {
 	std::string new_line;
 	size_t hash_char_pos;
 
@@ -45,7 +45,7 @@ std::string		c_syntax::replaceConsecutiveSpaces(const std::string& str)
  * @param str 
  * @return std::string 
  */
-std::string		c_syntax::trim_whitespaces(const std::string& str)
+std::string		c_syntax::trimWhitespaces(const std::string& str)
 {
 	std::string whitespaces;
 	std::string new_line;
@@ -71,14 +71,14 @@ std::string		c_syntax::trim_whitespaces(const std::string& str)
  * @param n quelle ligne?
  * @return std::string 
  */
-std::string		c_syntax::get_line(std::string str, size_t n)
+std::string		c_syntax::getLine(std::string str, size_t n)
 {
 	int i = 0;
 	size_t j = 0;
 	size_t ct = 0;
 	std::string temp;
 
-	if (n >= nb_lines(str))
+	if (n >= nbLines(str))
 		return std::string();
 	while (ct < n)
 	{
@@ -101,7 +101,7 @@ std::string		c_syntax::get_line(std::string str, size_t n)
  * @param str_config 
  * @return size_t 
  */
-size_t			c_syntax::nb_lines(std::string &str_config)
+size_t			c_syntax::nbLines(std::string &str_config)
 {
 	size_t lines = 1;
 	for (std::string::iterator ite = str_config.begin(); ite!=str_config.end(); ite++)
@@ -118,11 +118,11 @@ size_t			c_syntax::nb_lines(std::string &str_config)
  * @return true 
  * @return false 
  */
-bool			c_syntax::is_nothing(std::string str, int pos)
+bool			c_syntax::isNothing(std::string str, int pos)
 {
 	std::string line;
 
-	line = c_syntax::get_line(str, pos);
+	line = c_syntax::getLine(str, pos);
 	return (line.size() == 0 || line[0] == '}');
 }
 
@@ -133,7 +133,7 @@ bool			c_syntax::is_nothing(std::string str, int pos)
  * @return true 
  * @return false 
  */
-bool			c_syntax::check_brackets(std::string &config_string)
+bool			c_syntax::checkBrackets(std::string &config_string)
 {
 	std::stack<char>	bracket;
 	std::string::iterator ite;
@@ -162,7 +162,7 @@ bool			c_syntax::check_brackets(std::string &config_string)
  * trying to open file
  * @param path 
  */
-void			c_syntax::test_path(const std::string &path)
+void			c_syntax::testPath(const std::string &path)
 {
 	size_t ext_pos;
 	std::ifstream file;
@@ -176,7 +176,7 @@ void			c_syntax::test_path(const std::string &path)
 		throw (FileDoesNotExist());
 	if (!fileRead(path.c_str()))
 		throw (FileNotReadable());
-	if (is_Directory(path.c_str()))
+	if (isDirectory(path.c_str()))
 		throw (PathIsDir());
 	file.open(path.c_str(), std::ios_base::in);
 	if (!file) {
@@ -191,13 +191,13 @@ void			c_syntax::test_path(const std::string &path)
  * @param position
  * @return std::string 
  */
-std::string 	c_syntax::trim_line_to_i(std::string &str, size_t pos)
+std::string 	c_syntax::trimLineToI(std::string &str, size_t pos)
 {
 	int i = 0;
 	size_t ct = 0;
 	std::string temp;
 
-	if (pos >= nb_lines(str))
+	if (pos >= nbLines(str))
 		return temp;
 	while (ct < pos)
 	{
@@ -216,15 +216,15 @@ std::string 	c_syntax::trim_line_to_i(std::string &str, size_t pos)
  * @param str 
  * @return int 
  */
-int				c_syntax::find_closing_bracket(std::string str)
+int				c_syntax::findClosingBracket(std::string str)
 {
 	int line = 1;
 	int count = 1;
-	for (size_t i = 0; i < nb_lines(str); i++)
+	for (size_t i = 0; i < nbLines(str); i++)
 	{
-		if (get_line(str, i).find("{")!= std::string::npos)
+		if (getLine(str, i).find("{")!= std::string::npos)
 			count +=1;
-		if (get_line(str, i).find("}")!= std::string::npos)
+		if (getLine(str, i).find("}")!= std::string::npos)
 		{
 			if ((count -=1) == 0)
 				return line;
@@ -241,7 +241,7 @@ int				c_syntax::find_closing_bracket(std::string str)
  * @param charset 
  * @return std::vector<std::string> 
  */
-std::vector<std::string> c_syntax::split_string(std::string str, const std::string &charset)
+std::vector<std::string> c_syntax::splitString(std::string str, const std::string &charset)
 {
 	std::vector<std::string> tokens;
     size_t pos = 0;
@@ -270,7 +270,7 @@ std::string c_syntax::intToString(int num) {
  * 
  * @param std::string &conf 
  */
-void c_syntax::format_conf_file(std::string &conf)
+void c_syntax::formatConfFile(std::string &conf)
 {
 	int i = 0;
 	int j = conf.size();
@@ -322,7 +322,7 @@ void c_syntax::format_conf_file(std::string &conf)
  * @param str 
  * @return char 
  */
-char c_syntax::check_char(std::string str)
+char c_syntax::checkChar(std::string str)
 {
 		if (str[str.size()-1] == ';')
 			return '\n';

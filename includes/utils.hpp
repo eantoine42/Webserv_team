@@ -16,6 +16,6 @@ inline std::ostream& operator<<(std::ostream& os, const std::vector<T>& v)
 
 bool fileExists(const char* path);
 bool fileRead(const char* path);
-bool is_Directory(const char* path);
+bool isDirectory(const char* path);
 
 #endif

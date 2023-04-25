@@ -25,19 +25,19 @@ class   c_server {
 		/*
 		** Server setters
 		*/
-		void						set_cgi(std::vector<std::string> token);
-		void						set_port(std::vector<std::string> token);
-		void						set_root(std::vector<std::string> token);
-		void						set_IP(std::vector<std::string> token);
-		void						set_index(std::vector<std::string> token);
-		void						set_autoindex(std::vector<std::string> token);
-		void						set_name(std::vector<std::string> token);
-		void						set_error(std::vector<std::string> token);
-		void						set_client_body_size(std::vector<std::string> token);
-		int 						correct_server_instruction(std::vector<std::string> token);
-		int							skip_location_block(std::string str, int count);
-		void						parse_server(std::string str, int &count);
-		int							get_location_bloc(std::string str, int &count);
+		void						setCgi(std::vector<std::string> token);
+		void						setPort(std::vector<std::string> token);
+		void						setRoot(std::vector<std::string> token);
+		void						setIp(std::vector<std::string> token);
+		void						setIndex(std::vector<std::string> token);
+		void						setAutoindex(std::vector<std::string> token);
+		void						setName(std::vector<std::string> token);
+		void						setError(std::vector<std::string> token);
+		void						setClientBodySize(std::vector<std::string> token);
+		int 						correctServerInstruction(std::vector<std::string> token);
+		int							skipLocationBlock(std::string str, int count);
+		void						parseServer(std::string str, int &count);
+		int							getLocationBloc(std::string str, int &count);
 
 	
 
@@ -47,25 +47,25 @@ class   c_server {
 		c_server &operator=(c_server const &src);
 		virtual ~c_server();
 
-		void						add_location(std::string str, int &count, int &server_ct);
+		void						addLocation(std::string str, int &count, int &server_ct);
 
 		/*
 		** Server getters
 		*/
-		int							const &get_port() const;
-		std::string					const &get_root() const;
-		std::string					const &get_name() const;
-		std::string					const &get_IP() const;
-		std::string					const &get_error() const;
-		std::string					const &get_index() const;
-		bool						const &get_autoindex() const;
-		int							const &get_client_body_size() const;
-		std::vector<c_location>		const &get_location() const;
-		std::map<std::string, std::string>	const &get_cgi() const;
+		int							const &getPort() const;
+		std::string					const &getRoot() const;
+		std::string					const &getName() const;
+		std::string					const &getIp() const;
+		std::string					const &getError() const;
+		std::string					const &getIndex() const;
+		bool						const &getAutoindex() const;
+		int							const &getClientBodySize() const;
+		std::vector<c_location>		const &getLocation() const;
+		std::map<std::string, std::string>	const &getCgi() const;
 		
-		void						set_server(const std::string &str);
-		void 						clean_names(c_server &serv2);
-		void 						clean_dup_server(std::vector<c_server> server_info);
+		void						setServer(const std::string &str);
+		void 						cleanNames(c_server &serv2);
+		void 						cleanDupServer(std::vector<c_server> serverInfo);
 
 		
 };

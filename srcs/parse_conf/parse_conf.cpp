@@ -10,27 +10,27 @@
  * @param std::vector<c_server> server_info 
  * @param std::string str_config 
  */
-static void parse_servers(std::vector<c_server> &server_info, std::string str_config){
+static void parseServers(std::vector<c_server> &server_info, std::string str_config){
 	size_t i = 0;
 	if (DEBUG_STATUS)
 	{
 		//DEBUG_COUT("conf file nb lines :" + c_syntax::intToString(c_syntax::nb_lines(str_config)));
 		//DEBUG_COUT("\n****Server to parse without line server {****  \n\n" + str_config);
 	}
-	while (i < c_syntax::nb_lines(str_config))
+	while (i < c_syntax::nbLines(str_config))
 	{
-		if (!c_syntax::is_nothing(str_config, i))
+		if (!c_syntax::isNothing(str_config, i))
 		{
-			std::string	line = c_syntax::get_line(str_config, i);
+			std::string	line = c_syntax::getLine(str_config, i);
 			if (!line.compare(0, 6, "server") && line.size() == 6)
 			{
 				i++;
-				std::string	line = c_syntax::get_line(str_config, i);
+				std::string	line = c_syntax::getLine(str_config, i);
 				if (line.compare("{"))
 					throw(ConfFileParseError("Invalid Server Header"));
 				c_server temp_server;
-				temp_server.set_server( c_syntax::trim_line_to_i(str_config, i + 1));
-				temp_server.clean_dup_server(server_info);
+				temp_server.setServer( c_syntax::trimLineToI(str_config, i + 1));
+				temp_server.cleanDupServer(server_info);
 				server_info.push_back(temp_server);
 			}
 		}
@@ -50,7 +50,7 @@ static void parse_servers(std::vector<c_server> &server_info, std::string str_co
  * @param std::string const &path 
  * @return std::string 
  */
-static std::string get_string_conf(std::string const &path)
+static std::string getStringConf(std::string const &path)
 {
 	std::string content;
 	std::string line;
@@ -63,8 +63,8 @@ static std::string get_string_conf(std::string const &path)
 	{
 		std::string temp;
 
-		temp = c_syntax::trim_comments(line);
-		temp = c_syntax::trim_whitespaces(temp);
+		temp = c_syntax::trimComments(line);
+		temp = c_syntax::trimWhitespaces(temp);
 		content += temp;
 		content +="\n";
 	}
@@ -73,7 +73,7 @@ static std::string get_string_conf(std::string const &path)
 //	if (DEBUG_STATUS)
   //  	std::cout << content << std::endl;
 	file.close();
-	if (!c_syntax::check_brackets(content))
+	if (!c_syntax::checkBrackets(content))
 		throw ConfFileParseError("Error in the backets");
 	return content;
 }
@@ -85,23 +85,23 @@ static std::string get_string_conf(std::string const &path)
  * @param std::string path 
  * @return std::vector<c_server> 
  */
-std::vector<c_server> parse_conf_file(std::string const &path)
+std::vector<c_server> parseConfFile(std::string const &path)
 {
 	std::vector<c_server> server_list;
 	std::string conf_string;
 	std::string conf_string_formated = "";
 	std::string temp;
 
-	c_syntax::test_path(path);
-	conf_string = get_string_conf(path);
-	c_syntax::format_conf_file(conf_string);
-	int j = c_syntax::nb_lines(conf_string);
+	c_syntax::testPath(path);
+	conf_string = getStringConf(path);
+	c_syntax::formatConfFile(conf_string);
+	int j = c_syntax::nbLines(conf_string);
 	for (int i = 0; i < j; i++){
-		temp = c_syntax::trim_whitespaces(c_syntax::get_line(conf_string, i));
-		conf_string_formated += temp + c_syntax::check_char(temp);
+		temp = c_syntax::trimWhitespaces(c_syntax::getLine(conf_string, i));
+		conf_string_formated += temp + c_syntax::checkChar(temp);
 	}
-	c_syntax::format_conf_file(conf_string_formated);
+	c_syntax::formatConfFile(conf_string_formated);
 	conf_string_formated.erase(conf_string_formated.size() - 1);
-	parse_servers(server_list, conf_string_formated);
+	parseServers(server_list, conf_string_formated);
 	return (server_list);
 }

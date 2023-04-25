@@ -69,19 +69,19 @@ class c_syntax {
 		static const server_instruction_tab_entry_t 	server_instructions_tab[];
 		static const location_instruction_tab_entry_t 	location_instructions_tab[];
 
-		static std::string	trim_comments(const std::string &str);
-		static std::string	trim_whitespaces(const std::string& str);
+		static std::string	trimComments(const std::string &str);
+		static std::string	trimWhitespaces(const std::string& str);
 		static std::string  replaceConsecutiveSpaces(const std::string& str);
-		static std::string  get_line(std::string str, size_t n);
-		static size_t 		nb_lines(std::string &str_config);
-		static bool 		is_nothing(std::string str, int pos = 0);
-		static bool 		check_brackets(std::string &config_string);
-		static void 		test_path(const std::string &path);
-		static std::string 	trim_line_to_i(std::string &str, size_t pos);
-		static int			find_closing_bracket(std::string str);
-		static std::vector<std::string> split_string(std::string str, const std::string &charset = " ");
-		static void 		format_conf_file(std::string &conf);
-		static char 		check_char(std::string str);
+		static std::string  getLine(std::string str, size_t n);
+		static size_t 		nbLines(std::string &str_config);
+		static bool 		isNothing(std::string str, int pos = 0);
+		static bool 		checkBrackets(std::string &config_string);
+		static void 		testPath(const std::string &path);
+		static std::string 	trimLineToI(std::string &str, size_t pos);
+		static int			findClosingBracket(std::string str);
+		static std::vector<std::string> splitString(std::string str, const std::string &charset = " ");
+		static void 		formatConfFile(std::string &conf);
+		static char 		checkChar(std::string str);
 		static std::string 	intToString(int num);
 
 	private:

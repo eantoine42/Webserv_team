@@ -21,7 +21,7 @@ Debugger &Debugger::operator=( Debugger const & rhs) {
 ** --------------------------------- METHODS ----------------------------------
 */
 
-bool	Debugger::get_is_active() {
+bool	Debugger::getIsActive() {
 	return _is_active;
 }
 
@@ -29,7 +29,7 @@ void	Debugger::start(bool activate) {
 	_webserv_debugger._is_active = activate;
 }
 
-std::string	Debugger::get_date() {
+std::string	Debugger::getDate() {
 	struct tm *date = NULL;
 	char buff[64];
 	struct timeval tv;

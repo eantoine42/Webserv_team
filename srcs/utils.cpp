@@ -8,7 +8,7 @@ bool fileRead(const char* path) {
     return access(path, R_OK) != -1;
 }
 
-bool is_Directory(const char* path)
+bool isDirectory(const char* path)
 {
     struct stat statbuf;
     if (stat(path, &statbuf) != 0) {

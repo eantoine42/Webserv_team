@@ -42,28 +42,28 @@ c_location::~c_location(){}
 /*
 ** c_location getters
 */
-int									const &c_location::get_loc_index() const{return (_loc_index);}
-int									const &c_location::get_port() const{return (_port);}
-std::string							const &c_location::get_uri() const{return _uri;}
-bool								const &c_location::get_autoindex() const{return _autoindex;}
-std::string							const &c_location::get_index() const{return _index;}
-std::string							const &c_location::get_return() const{return _return;}
-std::vector<std::string>			const &c_location::get_allow_method() const{return _allow_method;}
-std::string							const &c_location::get_root() const{return _root;}
-std::string							const &c_location::get_upload_dir() const{return _upload_dir;}
-std::map<std::string, std::string>	const &c_location::get_cgi() const{return _cgi;}
-int									const &c_location::get_client_body_size() const{return (_client_body_size);}
-std::string							const &c_location::get_error() const{return (_error_pages);}
+int									const &c_location::getLocIndex() const{return (_loc_index);}
+int									const &c_location::getPort() const{return (_port);}
+std::string							const &c_location::getUri() const{return _uri;}
+bool								const &c_location::getAutoindex() const{return _autoindex;}
+std::string							const &c_location::getIndex() const{return _index;}
+std::string							const &c_location::getReturn() const{return _return;}
+std::vector<std::string>			const &c_location::getAllowMethod() const{return _allow_method;}
+std::string							const &c_location::getRoot() const{return _root;}
+std::string							const &c_location::getUploadDir() const{return _upload_dir;}
+std::map<std::string, std::string>	const &c_location::getCgi() const{return _cgi;}
+int									const &c_location::getClientBodySize() const{return (_client_body_size);}
+std::string							const &c_location::getError() const{return (_error_pages);}
 
-void	c_location::set_location(const std::string &str,  int &count)
+void	c_location::setLocation(const std::string &str,  int &count)
 {
 	
-	std::string line = c_syntax::get_line(str, count);
+	std::string line = c_syntax::getLine(str, count);
 	std::vector<std::string> token;
-	token = c_syntax::split_string(line, WHITESPACES);
-	set_uri(token);
+	token = c_syntax::splitString(line, WHITESPACES);
+	setUri(token);
 	count ++;
-	if(c_syntax::get_line(str, count).compare("{"))
+	if(c_syntax::getLine(str, count).compare("{"))
 		throw(ConfFileParseError("Invalid Location directive : no opening {"));
 	count ++;
 	int i = 0;
@@ -75,25 +75,25 @@ void	c_location::set_location(const std::string &str,  int &count)
 			ct++;
 		i++;
 	}
-	closing_line = c_syntax::find_closing_bracket(str.substr(i));
+	closing_line = c_syntax::findClosingBracket(str.substr(i));
 	for (i = 0; i < closing_line; i++)
 	{
-		line = c_syntax::get_line(str, count++);
-		parse_location(line);
+		line = c_syntax::getLine(str, count++);
+		parseLocation(line);
 	}
 }
 
-void	c_location::parse_location(std::string &line)
+void	c_location::parseLocation(std::string &line)
 {
 	typedef void (c_location::*loc_func)(std::vector<std::string> );
-	loc_func	funcs[] = {&c_location::set_root, &c_location::set_allow_method, &c_location::set_index, 
-	&c_location::set_cgi, &c_location::set_autoindex, &c_location::set_upload_dir, &c_location::set_return, &c_location::set_client_body_size,
-	&c_location::set_error_pages};
+	loc_func	funcs[] = {&c_location::setRoot, &c_location::setAllowMethod, &c_location::setIndex, 
+	&c_location::setCgi, &c_location::setAutoindex, &c_location::setUploadDir, &c_location::setReturn, &c_location::setClientBodySize,
+	&c_location::setErrorPages};
 	std::vector<std::string> token;
 	int instruct;
-	if ((token = c_syntax::split_string(line, WHITESPACES)).empty())
+	if ((token = c_syntax::splitString(line, WHITESPACES)).empty())
 		return;
-	else if ((instruct = (*this).correct_location_instruction(token)) != -1 && instruct < TOTAL_LOCATION_INSTRUCTIONS)
+	else if ((instruct = (*this).correctLocationInstruction(token)) != -1 && instruct < TOTAL_LOCATION_INSTRUCTIONS)
 		(this->*funcs[instruct])(token);
 	else if (instruct == TOTAL_LOCATION_INSTRUCTIONS)
 		return;
@@ -109,7 +109,7 @@ void	c_location::parse_location(std::string &line)
  * @return true 
  * @return false 
  */
-int 	c_location::correct_location_instruction(std::vector<std::string> token)
+int 	c_location::correctLocationInstruction(std::vector<std::string> token)
 {
 	int i = 0;
 	// check if the token corresponds to a valid instruction in server block
@@ -119,12 +119,12 @@ int 	c_location::correct_location_instruction(std::vector<std::string> token)
 			return i;
 		i++;
 	}
-	if (c_syntax::is_nothing(token[0]) || !token[0].compare("{"))
+	if (c_syntax::isNothing(token[0]) || !token[0].compare("{"))
 		return TOTAL_LOCATION_INSTRUCTIONS;
 	return -1;
 }
 
-int 	c_location::correct_method_instruction(std::vector<std::string> token)
+int 	c_location::correctMethodInstruction(std::vector<std::string> token)
 {
 	size_t i = 0;
 	size_t j = 1;
@@ -146,7 +146,7 @@ int 	c_location::correct_method_instruction(std::vector<std::string> token)
 /*
 ** c_location setters
 */
-void	c_location::set_uri(std::vector<std::string> token)
+void	c_location::setUri(std::vector<std::string> token)
 {
 	if(token.size() < 2 )
 		throw(ConfFileParseError("Invalid Location directive : not enough arguments"));
@@ -160,7 +160,7 @@ void	c_location::set_uri(std::vector<std::string> token)
 	}
 }
 
-void	c_location::set_autoindex(std::vector<std::string> token)
+void	c_location::setAutoindex(std::vector<std::string> token)
 {
 	if (token.size() != 2 || !(token[1].compare("on") || token[1].compare("off")))
 	throw(ConfFileParseError("Location bloc [" + c_syntax::intToString(_loc_index) +"] : problem with autoindex argument, on or off only"));
@@ -175,7 +175,7 @@ void	c_location::set_autoindex(std::vector<std::string> token)
 		break;
 	}
 }
-void	c_location::set_index(std::vector<std::string> token)
+void	c_location::setIndex(std::vector<std::string> token)
 {
 	_index = "";
 	size_t i = 1;
@@ -186,10 +186,10 @@ void	c_location::set_index(std::vector<std::string> token)
 	_index += token[i].erase(token[i].size() - 1);
 }
 
-void	c_location::set_allow_method(std::vector<std::string> token)
+void	c_location::setAllowMethod(std::vector<std::string> token)
 {
 	_allow_method.clear();
-	if (correct_method_instruction(token) == -1)
+	if (correctMethodInstruction(token) == -1)
 		throw(ConfFileParseError("Location bloc [" + c_syntax::intToString(_loc_index) + "] : Method not allowed"));
 	size_t i = 1;
 	for (; i < token.size() - 1; i++)
@@ -197,14 +197,14 @@ void	c_location::set_allow_method(std::vector<std::string> token)
 	_allow_method.push_back(token[i].erase(token[i].size() - 1));
 }
 
-void	c_location::set_root(std::vector<std::string> token)
+void	c_location::setRoot(std::vector<std::string> token)
 {
 	if (token.size() > 2)
 		throw(ConfFileParseError("Location bloc [" + c_syntax::intToString(_loc_index) +"] : Only one root allowed"));
 	_root = token[1].erase(token[1].size() - 1);
 }
 
-void	c_location::set_upload_dir(std::vector<std::string> token)
+void	c_location::setUploadDir(std::vector<std::string> token)
 {
 	_upload_dir = "";
 	size_t i = 1;
@@ -212,13 +212,13 @@ void	c_location::set_upload_dir(std::vector<std::string> token)
 		throw(ConfFileParseError("Location bloc [" + c_syntax::intToString(_loc_index) +"] : problem with number of arguments for upload dir"));
 	_upload_dir += token[i].erase(token[i].size() - 1);
 }
-void	c_location::set_cgi(std::vector<std::string> token)
+void	c_location::setCgi(std::vector<std::string> token)
 {
 	if (token.size() != 3)
 		throw(ConfFileParseError("Location bloc [" + c_syntax::intToString(_loc_index) +"] : cgi argument problem"));
 	_cgi.insert(std::pair<std::string, std::string>(token[1], token[2].erase(token[2].size() - 1)));
 }
-void	c_location::set_error_pages(std::vector<std::string> token)
+void	c_location::setErrorPages(std::vector<std::string> token)
 {
 	if (token.size() != 3 )
 		throw(ConfFileParseError("Location bloc [" + c_syntax::intToString(_loc_index) +"] : problem with number of arguments for error_page"));
@@ -229,13 +229,13 @@ void	c_location::set_error_pages(std::vector<std::string> token)
 		throw(ConfFileParseError("Location bloc [" + c_syntax::intToString(_loc_index) +"] : error_page : fisrt argument must be between 300 and 599"));
 	_error_pages = token[1] + " " + token[2].erase(token[2].size() - 1);
 }
-void	c_location::set_client_body_size(std::vector<std::string> token)
+void	c_location::setClientBodySize(std::vector<std::string> token)
 {
 	if (token.size() > 2)
 		throw(ConfFileParseError("Location bloc [" + c_syntax::intToString(_loc_index) +"] : Only one client body size max"));
 	_client_body_size = atoi(token[1].erase(token[1].size() - 1).c_str());
 }
-void	c_location::set_return(std::vector<std::string> token)
+void	c_location::setReturn(std::vector<std::string> token)
 	{
 		if (token.size() == 2)
 			_return = token[1].erase(token[1].size() - 1);
@@ -251,30 +251,30 @@ void	c_location::set_return(std::vector<std::string> token)
 
 std::ostream    &operator<<(std::ostream &o, c_location  const &i) 
 {
-	o << "************* location bloc number ["<<i.get_loc_index()<<"] *************"<< std::endl;
-	if (i.get_uri().empty() == false)
-		o << "    uri				=	[" << i.get_uri() << "] :" << std::endl;
-	o << "    port_number			=	[" << i.get_port() << "]" << std::endl;
-	o << "    autoindex			=	[" << i.get_autoindex() << "]" << std::endl;
-	if (i.get_index().empty() == false)
-		o << "    index			=	[" << i.get_index() << "]" << std::endl;
-	if (i.get_root().empty() == false)
-		o << "    root			=	[" << i.get_root() << "]" << std::endl;
-	if (i.get_return().empty() == false)
-		o << "    redirect			=	[" << i.get_return() << "]" << std::endl;
-	if (i.get_allow_method().empty() == false)
-		o << "    methods			=	[" << i.get_allow_method() << "]" << std::endl;
-	if (i.get_upload_dir().empty() == false)
-		o << "    upload_dir			=	[" << i.get_upload_dir() << "]" << std::endl;
-	if (i.get_cgi().empty() == false)
+	o << "************* location bloc number ["<<i.getLocIndex()<<"] *************"<< std::endl;
+	if (i.getUri().empty() == false)
+		o << "    uri				=	[" << i.getUri() << "] :" << std::endl;
+	o << "    portNumber			=	[" << i.getPort() << "]" << std::endl;
+	o << "    autoindex			=	[" << i.getAutoindex() << "]" << std::endl;
+	if (i.getIndex().empty() == false)
+		o << "    index			=	[" << i.getIndex() << "]" << std::endl;
+	if (i.getRoot().empty() == false)
+		o << "    root			=	[" << i.getRoot() << "]" << std::endl;
+	if (i.getReturn().empty() == false)
+		o << "    redirect			=	[" << i.getReturn() << "]" << std::endl;
+	if (i.getAllowMethod().empty() == false)
+		o << "    methods			=	[" << i.getAllowMethod() << "]" << std::endl;
+	if (i.getUploadDir().empty() == false)
+		o << "    uploadDir			=	[" << i.getUploadDir() << "]" << std::endl;
+	if (i.getCgi().empty() == false)
 	{
 		std::map<std::string, std::string>::const_iterator ite; 
-		for (ite = i.get_cgi().begin();ite != i.get_cgi().end(); ite++)
+		for (ite = i.getCgi().begin();ite != i.getCgi().end(); ite++)
 			o << "    cgi				=	[" << ite->first<<" ; " << ite->second<<"]" << std::endl;
 	}
-	if (i.get_client_body_size() > 0)
-		o << "    client_max_body_size	=	[" << i.get_client_body_size() << "]" << std::endl;
-	if (i.get_error().empty() == false)
-		o << "    error_page			=	[" << i.get_error() << "]" << std::endl;
+	if (i.getClientBodySize() > 0)
+		o << "    clientMaxBodySize	=	[" << i.getClientBodySize() << "]" << std::endl;
+	if (i.getError().empty() == false)
+		o << "    errorPage			=	[" << i.getError() << "]" << std::endl;
 	return (o);
 };

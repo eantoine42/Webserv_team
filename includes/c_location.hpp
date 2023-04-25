@@ -28,42 +28,42 @@ class   c_location {
 		/*
 		** c_location setters
 		*/
-		void	set_uri(std::vector<std::string> token);
-		void	set_autoindex(std::vector<std::string> token);
-		void	set_index(std::vector<std::string> token);
-		void	set_return(std::vector<std::string> token);
-		void	set_allow_method(std::vector<std::string> token);
-		void	set_root(std::vector<std::string> token);
-		void	set_upload_dir(std::vector<std::string> token);
-		void	set_cgi(std::vector<std::string> token);
-		void	set_client_body_size(std::vector<std::string> token);
-		void	set_error_pages(std::vector<std::string> token);
-		int 	correct_location_instruction(std::vector<std::string> token);
-		int 	correct_method_instruction(std::vector<std::string> token);
+		void	setUri(std::vector<std::string> token);
+		void	setAutoindex(std::vector<std::string> token);
+		void	setIndex(std::vector<std::string> token);
+		void	setReturn(std::vector<std::string> token);
+		void	setAllowMethod(std::vector<std::string> token);
+		void	setRoot(std::vector<std::string> token);
+		void	setUploadDir(std::vector<std::string> token);
+		void	setCgi(std::vector<std::string> token);
+		void	setClientBodySize(std::vector<std::string> token);
+		void	setErrorPages(std::vector<std::string> token);
+		int 	correctLocationInstruction(std::vector<std::string> token);
+		int 	correctMethodInstruction(std::vector<std::string> token);
 
 	public:
 		c_location(int port, int loc_index, std::map<std::string, std::string>	cgi, bool autoindex, std::string index, std::string root, int client_body_size);
 		c_location(const c_location &copy);
 		c_location &operator=(const c_location &copy);
 		~c_location();
-		void	set_location(const std::string &str,  int &count);
-		void	parse_location(std::string &line);
+		void	setLocation(const std::string &str,  int &count);
+		void	parseLocation(std::string &line);
 		
 		/*
 		** c_location getters
 		*/
-		int									const &get_loc_index() const;
-		int									const &get_port() const;
-		std::string							const &get_uri() const;
-		bool								const &get_autoindex() const;
-		std::string							const &get_index() const;
-		std::string							const &get_return() const;
-		std::vector<std::string>			const &get_allow_method() const;
-		std::string							const &get_root() const;
-		std::string							const &get_upload_dir() const;
-		int									const &get_client_body_size() const;
-		std::string							const &get_error() const;
-		std::map<std::string, std::string>	const &get_cgi() const;
+		int									const &getLocIndex() const;
+		int									const &getPort() const;
+		std::string							const &getUri() const;
+		bool								const &getAutoindex() const;
+		std::string							const &getIndex() const;
+		std::string							const &getReturn() const;
+		std::vector<std::string>			const &getAllowMethod() const;
+		std::string							const &getRoot() const;
+		std::string							const &getUploadDir() const;
+		int									const &getClientBodySize() const;
+		std::string							const &getError() const;
+		std::map<std::string, std::string>	const &getCgi() const;
 };
 
 
