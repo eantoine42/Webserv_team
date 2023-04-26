@@ -40,6 +40,8 @@ class   c_location {
 		void	setErrorPages(std::vector<std::string> token);
 		int 	correctLocationInstruction(std::vector<std::string> token);
 		int 	correctMethodInstruction(std::vector<std::string> token);
+		typedef void (c_location::*loc_func)(std::vector<std::string> );
+		void init_vector_loc_fct(std::vector<loc_func> &funcs);
 
 	public:
 		c_location(int port, int loc_index, std::map<std::string, std::string>	cgi, bool autoindex, std::string index, std::string root, int client_body_size);

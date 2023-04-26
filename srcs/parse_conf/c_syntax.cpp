@@ -330,6 +330,38 @@ char c_syntax::checkChar(std::string str)
 			return '\n';
 		return (' ');
 }
+/*
+int 	c_syntax::correctInstruction(std::vector<std::string> token, int type)
+	{
+		int i = 0;
+		int nbInstructions;
+		const c_syntax::tab_entry_t *tab;
+		
+
+
+		switch (type)
+		{
+		case SERVER:
+			nbInstructions = TOTAL_SERVER_INSTRUCTIONS;
+			tab = c_syntax::server_instructions_tab;
+			break;
+		case LOCATION:
+			nbInstructions = TOTAL_LOCATION_INSTRUCTIONS;
+			tab = c_syntax::location_instructions_tab;
+			break;
+		}
+		// check if the token corresponds to a valid instruction in server block
+		while (i < nbInstructions)
+		{
+			if (!token[0].compare(tab[i].name))
+				return i;
+			i++;
+		}
+		if (c_syntax::isNothing(token[0]) || !token[0].compare("{"))
+			return nbInstructions;
+		return -1;
+	}
+*/
 
 
 /**

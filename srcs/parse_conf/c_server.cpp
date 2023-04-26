@@ -52,7 +52,7 @@
 	 */
 	int 	c_server::correctServerInstruction(std::vector<std::string> token)
 	{
-		int i = 0;
+				int i = 0;
 		// check if the token corresponds to a valid instruction in server block
 		while (i < TOTAL_SERVER_INSTRUCTIONS)
 		{
@@ -62,8 +62,7 @@
 		}
 		if (c_syntax::isNothing(token[0]) || !token[0].compare("{"))
 			return TOTAL_SERVER_INSTRUCTIONS;
-		return -1;
-	}
+		return -1;}
 
 /**
  * @brief returns the number of line of location bloc
@@ -132,6 +131,19 @@ int	c_server::getLocationBloc(std::string str, int &count)
 	else return 1;
 }
 
+void c_server::init_vector_server_fct(std::vector<server_func> &funcs)
+{
+	funcs.push_back(&c_server::setRoot);
+	funcs.push_back( &c_server::setPort);
+	funcs.push_back(&c_server::setName);
+	funcs.push_back(&c_server::setError);
+	funcs.push_back(&c_server::setIndex);
+	funcs.push_back(&c_server::setAutoindex);
+	funcs.push_back(&c_server::setClientBodySize);
+	funcs.push_back(&c_server::setCgi);
+}
+
+
 /**
  * @brief fills all the server data
  * 
@@ -139,9 +151,9 @@ int	c_server::getLocationBloc(std::string str, int &count)
  */
 void	c_server::parseServer(std::string str, int &count)
 {
-	typedef void (c_server::*server_func)(std::vector<std::string> );
-	server_func	funcs[] = {&c_server::setRoot, &c_server::setPort, &c_server::setName, &c_server::setError,
-		&c_server::setIndex, &c_server::setAutoindex, &c_server::setClientBodySize, &c_server::setCgi, };
+	std::vector<server_func>	funcs;
+	init_vector_server_fct(funcs);
+
 	std::vector<std::string> token;
 	int instruct;
 	std::string line = c_syntax::getLine(str, count);
@@ -332,12 +344,6 @@ void c_server::cleanDupServer(std::vector<c_server> server_info)
 	
 }
 
-
-
-
-
-
-
 std::ostream    &operator<<(std::ostream &o, c_server const &i)
 {
     
@@ -362,7 +368,7 @@ std::ostream    &operator<<(std::ostream &o, c_server const &i)
 	   		o << "    cgi 			=	[" << ite->first<<" ; " << ite->second<<"]" << std::endl;
 	}
     if (i.getClientBodySize() > 0)
-		o << "    clientMaxBodySize	=	[" << i.getClientBodySize() << "]" << std::endl;
+		o << "    clientMaxBodySize		=	[" << i.getClientBodySize() << "]" << std::endl;
 	for (size_t j = 0; j< i.getLocation().size(); j++)
 		o<<i.getLocation()[j]<< std::endl;
     return (o);

@@ -82,13 +82,24 @@ void	c_location::setLocation(const std::string &str,  int &count)
 		parseLocation(line);
 	}
 }
+void c_location::init_vector_loc_fct(std::vector<loc_func> &funcs)
+{
+	funcs.push_back(&c_location::setRoot);
+	funcs.push_back(&c_location::setAllowMethod);
+	funcs.push_back(&c_location::setIndex);
+	funcs.push_back(&c_location::setCgi);
+	funcs.push_back(&c_location::setAutoindex);
+	funcs.push_back(&c_location::setUploadDir);
+	funcs.push_back(&c_location::setReturn);
+	funcs.push_back(&c_location::setClientBodySize);
+	funcs.push_back(&c_location::setErrorPages);
+}
+
 
 void	c_location::parseLocation(std::string &line)
 {
-	typedef void (c_location::*loc_func)(std::vector<std::string> );
-	loc_func	funcs[] = {&c_location::setRoot, &c_location::setAllowMethod, &c_location::setIndex, 
-	&c_location::setCgi, &c_location::setAutoindex, &c_location::setUploadDir, &c_location::setReturn, &c_location::setClientBodySize,
-	&c_location::setErrorPages};
+	std::vector<loc_func> funcs;
+	init_vector_loc_fct(funcs);
 	std::vector<std::string> token;
 	int instruct;
 	if ((token = c_syntax::splitString(line, WHITESPACES)).empty())
@@ -121,8 +132,7 @@ int 	c_location::correctLocationInstruction(std::vector<std::string> token)
 	}
 	if (c_syntax::isNothing(token[0]) || !token[0].compare("{"))
 		return TOTAL_LOCATION_INSTRUCTIONS;
-	return -1;
-}
+	return -1;}
 
 int 	c_location::correctMethodInstruction(std::vector<std::string> token)
 {
@@ -216,10 +226,12 @@ void	c_location::setCgi(std::vector<std::string> token)
 {
 	if (token.size() != 3)
 		throw(ConfFileParseError("Location bloc [" + c_syntax::intToString(_loc_index) +"] : cgi argument problem"));
+	_cgi.clear();
 	_cgi.insert(std::pair<std::string, std::string>(token[1], token[2].erase(token[2].size() - 1)));
 }
 void	c_location::setErrorPages(std::vector<std::string> token)
 {
+	
 	if (token.size() != 3 )
 		throw(ConfFileParseError("Location bloc [" + c_syntax::intToString(_loc_index) +"] : problem with number of arguments for error_page"));
 	for (size_t i= 0 ; i < token[1].size(); i++)
@@ -273,7 +285,7 @@ std::ostream    &operator<<(std::ostream &o, c_location  const &i)
 			o << "    cgi				=	[" << ite->first<<" ; " << ite->second<<"]" << std::endl;
 	}
 	if (i.getClientBodySize() > 0)
-		o << "    clientMaxBodySize	=	[" << i.getClientBodySize() << "]" << std::endl;
+		o << "    clientMaxBodySize		=	[" << i.getClientBodySize() << "]" << std::endl;
 	if (i.getError().empty() == false)
 		o << "    errorPage			=	[" << i.getError() << "]" << std::endl;
 	return (o);

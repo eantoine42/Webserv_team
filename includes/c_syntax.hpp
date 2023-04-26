@@ -83,6 +83,7 @@ class c_syntax {
 		static void 		formatConfFile(std::string &conf);
 		static char 		checkChar(std::string str);
 		static std::string 	intToString(int num);
+		static int 	correctInstruction(std::vector<std::string> token, int type);
 
 	private:
 		c_syntax();

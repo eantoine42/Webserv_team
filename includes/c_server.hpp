@@ -38,7 +38,8 @@ class   c_server {
 		int							skipLocationBlock(std::string str, int count);
 		void						parseServer(std::string str, int &count);
 		int							getLocationBloc(std::string str, int &count);
-
+		typedef void (c_server::*server_func)(std::vector<std::string> );
+		void init_vector_server_fct(std::vector<server_func> &funcs);
 	
 
 	public:
