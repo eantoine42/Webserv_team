@@ -134,7 +134,7 @@ int	c_server::getLocationBloc(std::string str, int &count)
 void c_server::init_vector_server_fct(std::vector<server_func> &funcs)
 {
 	funcs.push_back(&c_server::setRoot);
-	funcs.push_back( &c_server::setPort);
+	funcs.push_back(&c_server::setPort);
 	funcs.push_back(&c_server::setName);
 	funcs.push_back(&c_server::setError);
 	funcs.push_back(&c_server::setIndex);

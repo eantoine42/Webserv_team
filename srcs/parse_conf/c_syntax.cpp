@@ -418,3 +418,32 @@ c_syntax::location_instructions_tab[] = {
 	{L_ERROR_PAGE, "error_page"},
 	{URI, "uri"},
 };
+
+const c_syntax::request_header_tab_entry_t
+c_syntax::request_header_tab[] = {
+	{ACCEPT_CHARSET, "Accept-Charset"},
+	{CONTENT_LENGTH, "Content-Length"},
+	{AUTHORIZATION, "Authorization"},
+	{CONTENT_TYPE, "Content-Type"},
+	{DATE, "Date"},
+	{HOST, "Host"},
+	{REFERER, "Referer"},
+	{TRANSFER_ENCODING, "Transfer-Encoding"},
+	{USER_AGENT, "User-Agent"},
+};
+
+const c_syntax::answer_header_tab_entry_t
+c_syntax::answer_header_tab[] = {
+	{ALLOW, "Allow"},
+	{CONTENT_LANGUAGE, "Content-Language"},
+	{CONTENT_LENGTH, "Content-Length"},
+	{CONTENT_LOCATION, "Content-Location"},
+	{CONTENT_TYPE, "Content-Type"},
+	{DATE, "Date"},
+	{LAST_MODIFIED, "Last-Modified"},
+	{LOCATION, "Location"},
+	{RETRY_AFTER, "Retry-After"},
+	{SERVER, "Server"},
+	{TRANSFER_ENCODING, "Transfer-Encoding"},
+	{WWW_AUTHENTICATE, "WWW-Authenticate"},
+};

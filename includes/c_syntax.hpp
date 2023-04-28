@@ -45,6 +45,33 @@ enum location_instruction_t {
 	TOTAL_LOCATION_INSTRUCTIONS
 };
 
+enum request_header_name_t {
+	ACCEPT_CHARSET,
+	CONTENT_LENGTH,
+	AUTHORIZATION,
+	CONTENT_TYPE,
+	DATE,
+	HOST,
+	REFERER,
+	TRANSFER_ENCODING,
+	USER_AGENT
+};
+
+enum answer_header_name_t {
+	ALLOW,
+	CONTENT_LANGUAGE,
+	CONTENT_LENGTH,
+	CONTENT_LOCATION,
+	CONTENT_TYPE,
+	DATE,
+	LAST_MODIFIED,
+	LOCATION,
+	RETRY_AFTER,
+	SERVER,
+	TRANSFER_ENCODING,
+	WWW_AUTHENTICATE
+};
+
 class c_syntax {
 	public:
 		~c_syntax();
@@ -65,9 +92,21 @@ class c_syntax {
 			std::string 	name;
 		};
 
+		struct request_header_tab_entry_t {
+			request_header_name_t	header_index;
+			std::string		name;
+		};
+
+		struct answer_header_tab_entry_t {
+			answer_header_name_t	header_index;
+			std::string		name;
+		};
+
 		static const method_tab_entry_t					method_tab[];
 		static const server_instruction_tab_entry_t 	server_instructions_tab[];
 		static const location_instruction_tab_entry_t 	location_instructions_tab[];
+		static const request_header_tab_entry_t					request_header_tab[];
+		static const answer_header_tab_entry_t					answer_header_tab[];
 
 		static std::string	trimComments(const std::string &str);
 		static std::string	trimWhitespaces(const std::string& str);
