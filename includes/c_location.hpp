@@ -1,11 +1,11 @@
-#ifndef C_LOCATION_HPP
-# define C_LOCATION_HPP
+#ifndef location_HPP
+# define location_HPP
 
 #include "webserv.hpp"
 
 
 
-class   c_location {
+class   location {
 
 		private:
 		/*
@@ -26,7 +26,7 @@ class   c_location {
 		
 
 		/*
-		** c_location setters
+		** location setters
 		*/
 		void	setUri(std::vector<std::string> token);
 		void	setAutoindex(std::vector<std::string> token);
@@ -38,19 +38,19 @@ class   c_location {
 		void	setCgi(std::vector<std::string> token);
 		void	setClientBodySize(std::vector<std::string> token);
 		void	setErrorPages(std::vector<std::string> token);
-		typedef void (c_location::*loc_func)(std::vector<std::string> );
+		typedef void (location::*loc_func)(std::vector<std::string> );
 		void init_vector_loc_fct(std::vector<loc_func> &funcs);
 
 	public:
-		c_location(int port, int loc_index, std::map<std::string, std::string>	cgi, bool autoindex, std::string index, std::string root, int client_body_size);
-		c_location(const c_location &copy);
-		c_location &operator=(const c_location &copy);
-		~c_location();
+		location(int port, int loc_index, std::map<std::string, std::string>	cgi, bool autoindex, std::string index, std::string root, int client_body_size);
+		location(const location &copy);
+		location &operator=(const location &copy);
+		~location();
 		void	setLocation(const std::string &str,  int &count);
 		void	parseLocation(std::string &line);
 		
 		/*
-		** c_location getters
+		** location getters
 		*/
 		int									const &getLocIndex() const;
 		int									const &getPort() const;
@@ -68,5 +68,5 @@ class   c_location {
 
 
 
-std::ostream    &operator<<(std::ostream &o, c_location const &i);
+std::ostream    &operator<<(std::ostream &o, location const &i);
 #endif

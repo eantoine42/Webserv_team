@@ -1,7 +1,7 @@
 #include "../../includes/c_server.hpp"
 #include "../../includes/webserv.hpp"
 
-	c_server::c_server(void)
+	server::server(void)
 	:	_root("html"),
 		_port(8080),
 		_server_name(""),
@@ -10,7 +10,7 @@
 		_autoindex(false),
 		_client_body_size(1){}
 
-	c_server::c_server(c_server const &src)
+	server::server(server const &src)
 	:	_root(src._root),
 		_port(src._port),
 		_server_name(src._server_name),
@@ -21,27 +21,27 @@
 		_cgi(src._cgi),
 		_location(src._location)	{}
 	
-	c_server &c_server::operator=(c_server const &src){
-		c_server tmp(src);
+	server &server::operator=(server const &src){
+		server tmp(src);
 		std::swap(tmp, *this);
 		return (*this);
 	}
 
-	c_server::~c_server(){}
+	server::~server(){}
 
 	/*
 	** Server getters
 	*/
-	std::string							const &c_server::getRoot() const{return (_root);}
-	std::map<std::string, std::string>	const &c_server::getCgi() const{return (_cgi);}
-	int									const &c_server::getPort() const{return (_port);}
-	std::string							const &c_server::getName() const{return (_server_name);}
-	std::string							const &c_server::getIndex() const{return (_index);	}
-	bool								const &c_server::getAutoindex() const{return (_autoindex);}
-	std::string							const &c_server::getIp() const{return (_IP);}
-	std::string							const &c_server::getError() const{return (_error_pages);}
-	int									const &c_server::getClientBodySize() const{return (_client_body_size);}
-	std::vector<c_location>				const &c_server::getLocation() const{return (_location);}
+	std::string							const &server::getRoot() const{return (_root);}
+	std::map<std::string, std::string>	const &server::getCgi() const{return (_cgi);}
+	int									const &server::getPort() const{return (_port);}
+	std::string							const &server::getName() const{return (_server_name);}
+	std::string							const &server::getIndex() const{return (_index);	}
+	bool								const &server::getAutoindex() const{return (_autoindex);}
+	std::string							const &server::getIp() const{return (_IP);}
+	std::string							const &server::getError() const{return (_error_pages);}
+	int									const &server::getClientBodySize() const{return (_client_body_size);}
+	std::vector<location>				const &server::getLocation() const{return (_location);}
 	
 
 
@@ -52,7 +52,7 @@
  * @param count 
  * @return int 
  */
-int	c_server::skipLocationBlock(std::string str, int count)
+int	server::skipLocationBlock(std::string str, int count)
 {
 	int i = 0;
 	int in = 0;
@@ -70,7 +70,7 @@ int	c_server::skipLocationBlock(std::string str, int count)
 			in = 1;
 		i++;
 	}
-	ct += c_syntax::findClosingBracket(str.substr(i + 2));
+	ct += syntax::findClosingBracket(str.substr(i + 2));
 	return (ct -1 - count);
 }
 
@@ -80,48 +80,48 @@ int	c_server::skipLocationBlock(std::string str, int count)
  * 
  * @param str 
  */
-void	c_server::setServer(const std::string &str)
+void	server::setServer(const std::string &str)
 {
 	int count = 0;
-	int pos_end = c_syntax::findClosingBracket(str);
+	int pos_end = syntax::findClosingBracket(str);
 	int location_ct = 0;
 	//DEBUG_COUT("\n****Server to parse without line server {  \n\n" + str);
 	while (count < pos_end)
 	{
-		c_server::parseServer(str, count);
+		server::parseServer(str, count);
 		count++;
 	}
 	count = 0;
 	while (count < pos_end)
 	{
-		if (c_server::getLocationBloc(str,count) == -1)
+		if (server::getLocationBloc(str,count) == -1)
 			count++;
-		else c_server::addLocation(str, count, ++location_ct);
+		else server::addLocation(str, count, ++location_ct);
 	}
 	//std::cout<<*this<<std::endl;
 }
 
-int	c_server::getLocationBloc(std::string str, int &count)
+int	server::getLocationBloc(std::string str, int &count)
 {
 	std::vector<std::string> token;
-	std::string line = c_syntax::getLine(str, count);
-	if ((token = c_syntax::splitString(line, WHITESPACES)).empty())
+	std::string line = syntax::getLine(str, count);
+	if ((token = syntax::splitString(line, WHITESPACES)).empty())
 		return -1;
-	else if (c_syntax::correctServerInstruction(token) != LOCATION_INSTRUCTION)
+	else if (syntax::correctServerInstruction(token) != LOCATION_INSTRUCTION)
 		return -1;
 	else return 1;
 }
 
-void c_server::init_vector_server_fct(std::vector<server_func> &funcs)
+void server::init_vector_server_fct(std::vector<server_func> &funcs)
 {
-	funcs.push_back(&c_server::setRoot);
-	funcs.push_back(&c_server::setPort);
-	funcs.push_back(&c_server::setName);
-	funcs.push_back(&c_server::setError);
-	funcs.push_back(&c_server::setIndex);
-	funcs.push_back(&c_server::setAutoindex);
-	funcs.push_back(&c_server::setClientBodySize);
-	funcs.push_back(&c_server::setCgi);
+	funcs.push_back(&server::setRoot);
+	funcs.push_back(&server::setPort);
+	funcs.push_back(&server::setName);
+	funcs.push_back(&server::setError);
+	funcs.push_back(&server::setIndex);
+	funcs.push_back(&server::setAutoindex);
+	funcs.push_back(&server::setClientBodySize);
+	funcs.push_back(&server::setCgi);
 }
 
 
@@ -130,17 +130,17 @@ void c_server::init_vector_server_fct(std::vector<server_func> &funcs)
  * 
  * @param str 
  */
-void	c_server::parseServer(std::string str, int &count)
+void	server::parseServer(std::string str, int &count)
 {
 	std::vector<server_func>	funcs;
 	init_vector_server_fct(funcs);
 
 	std::vector<std::string> token;
 	int instruct;
-	std::string line = c_syntax::getLine(str, count);
-	if ((token = c_syntax::splitString(line, WHITESPACES)).empty())
+	std::string line = syntax::getLine(str, count);
+	if ((token = syntax::splitString(line, WHITESPACES)).empty())
 		return ;
-	else if ((instruct = c_syntax::correctServerInstruction(token)) != -1)
+	else if ((instruct = syntax::correctServerInstruction(token)) != -1)
 	{
 		if (instruct == LOCATION_INSTRUCTION)
 			count += skipLocationBlock(str, count);
@@ -152,35 +152,35 @@ void	c_server::parseServer(std::string str, int &count)
 		throw (ConfFileParseError("Wrong input in server : Directive " + token[0]+" invalid"));
 }
 
-void	c_server::addLocation(std::string str, int &count, int &server_ct)
+void	server::addLocation(std::string str, int &count, int &server_ct)
 {
-		c_location loc(getPort(),server_ct, getCgi(), getAutoindex(), getIndex(), getRoot(), getClientBodySize());
+		location loc(getPort(),server_ct, getCgi(), getAutoindex(), getIndex(), getRoot(), getClientBodySize());
 		loc.setLocation(str, count);
 		this->_location.push_back(loc);
 }
 
 
-void	c_server::setRoot(std::vector<std::string> token)
+void	server::setRoot(std::vector<std::string> token)
 {
 	if (token.size() > 2)
 		throw(ConfFileParseError("Only one root allowed"));
 	_root = token[1].erase(token[1].size() - 1);
 }
 	
-void	c_server::setCgi(std::vector<std::string> token)
+void	server::setCgi(std::vector<std::string> token)
 {
 	if (token.size() != 3)
 		throw(ConfFileParseError("cgi argument problem"));
 	_cgi.insert(std::pair<std::string, std::string>(token[1], token[2].erase(token[2].size() - 1)));
 }
 	
-void	c_server::setPort(std::vector<std::string> token)
+void	server::setPort(std::vector<std::string> token)
 {
 	setIp(token);
 	std::string str;
 	if (token.size() > 2)
 		throw(ConfFileParseError("Only one port allowed"));
-	std::vector<std::string> tmp = c_syntax::splitString(token[1],":");
+	std::vector<std::string> tmp = syntax::splitString(token[1],":");
 	if (tmp.size() == 1)
 		str = tmp[0].substr(0, tmp[0].size() - 1);
 	else 
@@ -191,12 +191,12 @@ void	c_server::setPort(std::vector<std::string> token)
 	_port = atoi(str.c_str());
 }
 
-void	c_server::setIp(std::vector<std::string> token)
+void	server::setIp(std::vector<std::string> token)
 {
 	std::string str;
 	if (token.size() > 2)
 		throw(ConfFileParseError("Only one IP:port allowed"));
-	std::vector<std::string> tmp = c_syntax::splitString(token[1],":");
+	std::vector<std::string> tmp = syntax::splitString(token[1],":");
 	if ((!tmp[0].compare("*") && tmp[0].size() == 1))
 	{
 		_IP = tmp[0];
@@ -207,7 +207,7 @@ void	c_server::setIp(std::vector<std::string> token)
 		_IP = "127.0.0.1";
 		return ;
 	}
-	std::vector<std::string> tmp1 = c_syntax::splitString(tmp[0],".");
+	std::vector<std::string> tmp1 = syntax::splitString(tmp[0],".");
 	if (tmp1.size() != 4)
 		throw(ConfFileParseError("IP formating problem"));
 	for (int j = 0; j< 4; j++)
@@ -218,7 +218,7 @@ void	c_server::setIp(std::vector<std::string> token)
 	_IP = tmp[0];
 }
 
-void	c_server::setName(std::vector<std::string> token)
+void	server::setName(std::vector<std::string> token)
 {
 	size_t i = 0;
 	_server_name = "";
@@ -239,7 +239,7 @@ void	c_server::setName(std::vector<std::string> token)
 	}
 }
 	
-void	c_server::setError(std::vector<std::string> token)
+void	server::setError(std::vector<std::string> token)
 {
 	if (token.size() != 3 )
 		throw(ConfFileParseError("problem with number of arguments for error_page"));
@@ -251,7 +251,7 @@ void	c_server::setError(std::vector<std::string> token)
 	_error_pages = token[1] + " " + token[2].erase(token[2].size() - 1);
 }
 
-void	c_server::setIndex(std::vector<std::string> token)
+void	server::setIndex(std::vector<std::string> token)
 {
 	_index = "";
 	size_t i = 1;
@@ -262,7 +262,7 @@ void	c_server::setIndex(std::vector<std::string> token)
 	_index += token[i].erase(token[i].size() - 1);
 }
 
-void	c_server::setAutoindex(std::vector<std::string> token)
+void	server::setAutoindex(std::vector<std::string> token)
 {
 	if (token.size() != 2 || !(token[1].compare("on") || token[1].compare("off")))
 		throw(ConfFileParseError("problem with autoindex argument"));
@@ -278,7 +278,7 @@ void	c_server::setAutoindex(std::vector<std::string> token)
 	}
 }
 
-void	c_server::setClientBodySize(std::vector<std::string> token)
+void	server::setClientBodySize(std::vector<std::string> token)
 {
 	if (token.size() > 2)
 		throw(ConfFileParseError("Only one client body size max"));
@@ -286,23 +286,23 @@ void	c_server::setClientBodySize(std::vector<std::string> token)
 }
 
 
-void c_server::cleanDupServer(std::vector<c_server> server_info)
+void server::cleanDupServer(std::vector<server> server_info)
 {
 	if (server_info.size() == 0)
 	return ;
-	std::vector<c_server>::iterator it = server_info.begin();
+	std::vector<server>::iterator it = server_info.begin();
 	std::vector<std::string>::iterator it2;
 	std::string list_names;
 	std::string res;
 	std::vector<std::string> vect_names1;
-	std::vector<std::string> vect_names2 = c_syntax::splitString(this->_server_name);
+	std::vector<std::string> vect_names2 = syntax::splitString(this->_server_name);
 
 	for(; it != server_info.end(); it++)
 	{
 		if (!(this->_IP.compare(it->_IP)) && (this->_port ==(it->_port)))
 		{		
 			list_names = (*it).getName();
-			vect_names1 = c_syntax::splitString(list_names);
+			vect_names1 = syntax::splitString(list_names);
 			std::vector<std::string> vect_names4(vect_names1.size() + vect_names2.size());
 			it2 = std::set_intersection(vect_names1.begin(), vect_names1.end(), vect_names2.begin(), vect_names2.end(), vect_names4.begin());
 			vect_names4.resize(it2 - vect_names4.begin());
@@ -325,7 +325,7 @@ void c_server::cleanDupServer(std::vector<c_server> server_info)
 	
 }
 
-std::ostream    &operator<<(std::ostream &o, c_server const &i)
+std::ostream    &operator<<(std::ostream &o, server const &i)
 {
     
 	o << "************* Server bloc [" << i.getName() << "] *************"<< std::endl;
@@ -355,7 +355,7 @@ std::ostream    &operator<<(std::ostream &o, c_server const &i)
     return (o);
 };
 
-std::ostream    &operator<<(std::ostream &o, std::vector<c_server>  const &srv)
+std::ostream    &operator<<(std::ostream &o, std::vector<server>  const &srv)
 {
 	for (size_t i = 0; i< srv.size(); i++)
 		o<<srv[i]<< std::endl;

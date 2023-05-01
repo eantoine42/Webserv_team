@@ -2,9 +2,9 @@
 # define C_SERVER_HPP
 
 #include "c_location.hpp"
-class c_location;
+class location;
 
-class   c_server {
+class   server {
 
 		private:
 		/*
@@ -19,7 +19,7 @@ class   c_server {
 		bool						_autoindex;
 		int							_client_body_size;
 		std::map<std::string, std::string>	_cgi;
-		std::vector<c_location>		_location;
+		std::vector<location>		_location;
 
 
 		/*
@@ -37,15 +37,15 @@ class   c_server {
 		int							skipLocationBlock(std::string str, int count);
 		void						parseServer(std::string str, int &count);
 		int							getLocationBloc(std::string str, int &count);
-		typedef void (c_server::*server_func)(std::vector<std::string> );
+		typedef void (server::*server_func)(std::vector<std::string> );
 		void init_vector_server_fct(std::vector<server_func> &funcs);
 	
 
 	public:
-		c_server(void);
-		c_server(c_server const &src);
-		c_server &operator=(c_server const &src);
-		virtual ~c_server();
+		server(void);
+		server(server const &src);
+		server &operator=(server const &src);
+		virtual ~server();
 
 		void						addLocation(std::string str, int &count, int &server_ct);
 
@@ -60,17 +60,17 @@ class   c_server {
 		std::string					const &getIndex() const;
 		bool						const &getAutoindex() const;
 		int							const &getClientBodySize() const;
-		std::vector<c_location>		const &getLocation() const;
+		std::vector<location>		const &getLocation() const;
 		std::map<std::string, std::string>	const &getCgi() const;
 		
 		void						setServer(const std::string &str);
-		void 						cleanNames(c_server &serv2);
-		void 						cleanDupServer(std::vector<c_server> serverInfo);
+		void 						cleanNames(server &serv2);
+		void 						cleanDupServer(std::vector<server> serverInfo);
 
 		
 };
 
-std::ostream    &operator<<(std::ostream &o, c_server const &i);
+std::ostream    &operator<<(std::ostream &o, server const &i);
 
-std::ostream    &operator<<(std::ostream &o, std::vector<c_server>  const &srv);
+std::ostream    &operator<<(std::ostream &o, std::vector<server>  const &srv);
 #endif

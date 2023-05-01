@@ -72,9 +72,9 @@ enum answer_header_name_t {
 	WWW_AUTHENTICATE
 };
 
-class c_syntax {
+class syntax {
 	public:
-		~c_syntax();
+		~syntax();
 		struct method_tab_entry_t 
 		{
 			method_t		method_index;
@@ -127,9 +127,9 @@ class c_syntax {
 		static int 	correctMethodInstruction(std::vector<std::string> token);
 
 	private:
-		c_syntax(); 
-		c_syntax(const c_syntax& src);
-		c_syntax& operator=(const c_syntax& rhs);
+		syntax(); 
+		syntax(const syntax& src);
+		syntax& operator=(const syntax& rhs);
 };
 		
 #endif

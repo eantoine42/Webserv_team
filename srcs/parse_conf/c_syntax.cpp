@@ -6,7 +6,7 @@
  * @param str 
  * @return std::string 
  */
-std::string		c_syntax::trimComments(const std::string &str) {
+std::string		syntax::trimComments(const std::string &str) {
 	std::string new_line;
 	size_t hash_char_pos;
 
@@ -23,7 +23,7 @@ std::string		c_syntax::trimComments(const std::string &str) {
  * @param str 
  * @return std::string 
  */
-std::string		c_syntax::replaceConsecutiveSpaces(const std::string& str) 
+std::string		syntax::replaceConsecutiveSpaces(const std::string& str) 
 {
     std::stringstream ss;
     bool previousCharIsSpace = false;
@@ -45,7 +45,7 @@ std::string		c_syntax::replaceConsecutiveSpaces(const std::string& str)
  * @param str 
  * @return std::string 
  */
-std::string		c_syntax::trimWhitespaces(const std::string& str)
+std::string		syntax::trimWhitespaces(const std::string& str)
 {
 	std::string whitespaces;
 	std::string new_line;
@@ -71,7 +71,7 @@ std::string		c_syntax::trimWhitespaces(const std::string& str)
  * @param n quelle ligne?
  * @return std::string 
  */
-std::string		c_syntax::getLine(std::string str, size_t n)
+std::string		syntax::getLine(std::string str, size_t n)
 {
 	int i = 0;
 	size_t j = 0;
@@ -101,7 +101,7 @@ std::string		c_syntax::getLine(std::string str, size_t n)
  * @param str_config 
  * @return size_t 
  */
-size_t			c_syntax::nbLines(std::string &str_config)
+size_t			syntax::nbLines(std::string &str_config)
 {
 	size_t lines = 1;
 	for (std::string::iterator ite = str_config.begin(); ite!=str_config.end(); ite++)
@@ -118,11 +118,11 @@ size_t			c_syntax::nbLines(std::string &str_config)
  * @return true 
  * @return false 
  */
-bool			c_syntax::isNothing(std::string str, int pos)
+bool			syntax::isNothing(std::string str, int pos)
 {
 	std::string line;
 
-	line = c_syntax::getLine(str, pos);
+	line = syntax::getLine(str, pos);
 	return (line.size() == 0 || line[0] == '}');
 }
 
@@ -133,7 +133,7 @@ bool			c_syntax::isNothing(std::string str, int pos)
  * @return true 
  * @return false 
  */
-bool			c_syntax::checkBrackets(std::string &config_string)
+bool			syntax::checkBrackets(std::string &config_string)
 {
 	std::stack<char>	bracket;
 	std::string::iterator ite;
@@ -162,7 +162,7 @@ bool			c_syntax::checkBrackets(std::string &config_string)
  * trying to open file
  * @param path 
  */
-void			c_syntax::testPath(const std::string &path)
+void			syntax::testPath(const std::string &path)
 {
 	size_t ext_pos;
 	std::ifstream file;
@@ -191,7 +191,7 @@ void			c_syntax::testPath(const std::string &path)
  * @param position
  * @return std::string 
  */
-std::string 	c_syntax::trimLineToI(std::string &str, size_t pos)
+std::string 	syntax::trimLineToI(std::string &str, size_t pos)
 {
 	int i = 0;
 	size_t ct = 0;
@@ -216,7 +216,7 @@ std::string 	c_syntax::trimLineToI(std::string &str, size_t pos)
  * @param str 
  * @return int 
  */
-int				c_syntax::findClosingBracket(std::string str)
+int				syntax::findClosingBracket(std::string str)
 {
 	int line = 1;
 	int count = 1;
@@ -241,7 +241,7 @@ int				c_syntax::findClosingBracket(std::string str)
  * @param charset 
  * @return std::vector<std::string> 
  */
-std::vector<std::string> c_syntax::splitString(std::string str, const std::string &charset)
+std::vector<std::string> syntax::splitString(std::string str, const std::string &charset)
 {
 	std::vector<std::string> tokens;
     size_t pos = 0;
@@ -257,7 +257,7 @@ std::vector<std::string> c_syntax::splitString(std::string str, const std::strin
     return tokens;
 }
 
-std::string c_syntax::intToString(int num) {
+std::string syntax::intToString(int num) {
   std::stringstream ss;
   ss << num;
   return ss.str();
@@ -270,7 +270,7 @@ std::string c_syntax::intToString(int num) {
  * 
  * @param std::string &conf 
  */
-void c_syntax::formatConfFile(std::string &conf)
+void syntax::formatConfFile(std::string &conf)
 {
 	int i = 0;
 	int j = conf.size();
@@ -322,7 +322,7 @@ void c_syntax::formatConfFile(std::string &conf)
  * @param str 
  * @return char 
  */
-char c_syntax::checkChar(std::string str)
+char syntax::checkChar(std::string str)
 {
 		if (str[str.size()-1] == ';')
 			return '\n';
@@ -338,17 +338,17 @@ char c_syntax::checkChar(std::string str)
 	 * @return true 
 	 * @return false 
 	 */
-	int 	c_syntax::correctServerInstruction(std::vector<std::string> token)
+	int 	syntax::correctServerInstruction(std::vector<std::string> token)
 	{
 				int i = 0;
 		// check if the token corresponds to a valid instruction in server block
 		while (i < TOTAL_SERVER_INSTRUCTIONS)
 		{
-			if (!token[0].compare(c_syntax::server_instructions_tab[i].name))
+			if (!token[0].compare(syntax::server_instructions_tab[i].name))
 				return i;
 			i++;
 		}
-		if (c_syntax::isNothing(token[0]) || !token[0].compare("{"))
+		if (syntax::isNothing(token[0]) || !token[0].compare("{"))
 			return TOTAL_SERVER_INSTRUCTIONS;
 		return -1;
 }
@@ -360,21 +360,21 @@ char c_syntax::checkChar(std::string str)
  * @return true 
  * @return false 
  */
-int 	c_syntax::correctLocationInstruction(std::vector<std::string> token)
+int 	syntax::correctLocationInstruction(std::vector<std::string> token)
 {
 	int i = 0;
 	// check if the token corresponds to a valid instruction in server block
 	while (i < TOTAL_LOCATION_INSTRUCTIONS)
 	{
-		if (!token[0].compare(c_syntax::location_instructions_tab[i].name))
+		if (!token[0].compare(syntax::location_instructions_tab[i].name))
 			return i;
 		i++;
 	}
-	if (c_syntax::isNothing(token[0]) || !token[0].compare("{"))
+	if (syntax::isNothing(token[0]) || !token[0].compare("{"))
 		return TOTAL_LOCATION_INSTRUCTIONS;
 	return -1;}
 
-int 	c_syntax::correctMethodInstruction(std::vector<std::string> token)
+int 	syntax::correctMethodInstruction(std::vector<std::string> token)
 {
 	size_t i = 0;
 	size_t j = 1;
@@ -384,7 +384,7 @@ int 	c_syntax::correctMethodInstruction(std::vector<std::string> token)
 		i = 0;
 		while (i < TOTAL_METHODS_INSTRUCTIONS)
 		{
-			if (!token[j].compare(c_syntax::method_tab[i].name))
+			if (!token[j].compare(syntax::method_tab[i].name))
 				return j;
 			i++;
 		}
@@ -398,8 +398,8 @@ int 	c_syntax::correctMethodInstruction(std::vector<std::string> token)
  * for use in the table of functions
  * 
  */
-const c_syntax::method_tab_entry_t
-c_syntax::method_tab[] = {
+const syntax::method_tab_entry_t
+syntax::method_tab[] = {
 	{GET, "GET"},
 	{HEAD, "HEAD"},
 	{POST, "POST"},
@@ -415,8 +415,8 @@ c_syntax::method_tab[] = {
  * for use in the table of functions
  * 
  */
-const c_syntax::server_instruction_tab_entry_t
-c_syntax::server_instructions_tab[] = {
+const syntax::server_instruction_tab_entry_t
+syntax::server_instructions_tab[] = {
 	{S_ROOT, "root"},
 	{LISTEN, "listen"},
 	{SERVER_NAME, "server_name"},
@@ -434,8 +434,8 @@ c_syntax::server_instructions_tab[] = {
  * for use in the table of functions
  * 
  */
-const c_syntax::location_instruction_tab_entry_t
-c_syntax::location_instructions_tab[] = {
+const syntax::location_instruction_tab_entry_t
+syntax::location_instructions_tab[] = {
 	{L_ROOT, "root"},
 	{METHODS, "methods"},
 	{L_INDEX, "index"},
@@ -448,8 +448,8 @@ c_syntax::location_instructions_tab[] = {
 	{URI, "uri"},
 };
 
-const c_syntax::request_header_tab_entry_t
-c_syntax::request_header_tab[] = {
+const syntax::request_header_tab_entry_t
+syntax::request_header_tab[] = {
 	{ACCEPT_CHARSET, "Accept-Charset"},
 	{CONTENT_LENGTH, "Content-Length"},
 	{AUTHORIZATION, "Authorization"},
@@ -461,8 +461,8 @@ c_syntax::request_header_tab[] = {
 	{USER_AGENT, "User-Agent"},
 };
 
-const c_syntax::answer_header_tab_entry_t
-c_syntax::answer_header_tab[] = {
+const syntax::answer_header_tab_entry_t
+syntax::answer_header_tab[] = {
 	{ALLOW, "Allow"},
 	{CONTENT_LANGUAGE, "Content-Language"},
 	{A_CONTENT_LENGTH, "Content-Length"},

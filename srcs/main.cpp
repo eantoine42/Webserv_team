@@ -10,7 +10,7 @@ static int  printUsage(char const *const prog_name) {
 }
 
 int     main(int argc, const char **argv) {
-    std::vector<c_server> serverlist;
+    std::vector<server> serverlist;
 	argc = 1;
     if (argv[argc] && !std::strcmp(argv[argc], "-v"))
 	{
