@@ -15,6 +15,9 @@ DEBUG_PATH = debug/
 
 DEBUG_FILE = Debugger.cpp
 
+HTTP_PATH = http/
+
+HTTP_FILE = response.cpp
 
 SRCS_PATH = srcs/
 
@@ -28,7 +31,7 @@ SRCS = $(addprefix $(SRCS_PATH), $(SRCS_FILE))
 OBJS = $(SRCS:.cpp=.o)
 
 HEADER_FILE = webserv.hpp c_debugger.hpp c_location.hpp c_server.hpp \
- parse_conf.hpp exception.hpp utils.hpp c_syntax.hpp
+ parse_conf.hpp exception.hpp utils.hpp c_syntax.hpp response.hpp
 
 HEADER_PATH = includes/
 
