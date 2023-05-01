@@ -30,4 +30,5 @@ class Debugger
 		bool _is_active;
 };
 
+
 #endif
