@@ -330,39 +330,68 @@ char c_syntax::checkChar(std::string str)
 			return '\n';
 		return (' ');
 }
-/*
-int 	c_syntax::correctInstruction(std::vector<std::string> token, int type)
+
+/**
+	 * @brief Checks if the server directive are part of server or location block
+	 * 
+	 * @param token 
+	 * @return true 
+	 * @return false 
+	 */
+	int 	c_syntax::correctServerInstruction(std::vector<std::string> token)
 	{
-		int i = 0;
-		int nbInstructions;
-		const c_syntax::tab_entry_t *tab;
-		
-
-
-		switch (type)
-		{
-		case SERVER:
-			nbInstructions = TOTAL_SERVER_INSTRUCTIONS;
-			tab = c_syntax::server_instructions_tab;
-			break;
-		case LOCATION:
-			nbInstructions = TOTAL_LOCATION_INSTRUCTIONS;
-			tab = c_syntax::location_instructions_tab;
-			break;
-		}
+				int i = 0;
 		// check if the token corresponds to a valid instruction in server block
-		while (i < nbInstructions)
+		while (i < TOTAL_SERVER_INSTRUCTIONS)
 		{
-			if (!token[0].compare(tab[i].name))
+			if (!token[0].compare(c_syntax::server_instructions_tab[i].name))
 				return i;
 			i++;
 		}
 		if (c_syntax::isNothing(token[0]) || !token[0].compare("{"))
-			return nbInstructions;
+			return TOTAL_SERVER_INSTRUCTIONS;
 		return -1;
-	}
-*/
+}
 
+/**
+ * @brief Checks if the location directive are part of location block
+ * 
+ * @param token 
+ * @return true 
+ * @return false 
+ */
+int 	c_syntax::correctLocationInstruction(std::vector<std::string> token)
+{
+	int i = 0;
+	// check if the token corresponds to a valid instruction in server block
+	while (i < TOTAL_LOCATION_INSTRUCTIONS)
+	{
+		if (!token[0].compare(c_syntax::location_instructions_tab[i].name))
+			return i;
+		i++;
+	}
+	if (c_syntax::isNothing(token[0]) || !token[0].compare("{"))
+		return TOTAL_LOCATION_INSTRUCTIONS;
+	return -1;}
+
+int 	c_syntax::correctMethodInstruction(std::vector<std::string> token)
+{
+	size_t i = 0;
+	size_t j = 1;
+	token[token.size() - 1] = token[token.size() - 1].erase(token[token.size() - 1].size() - 1);
+	while (j < token.size())
+	{
+		i = 0;
+		while (i < TOTAL_METHODS_INSTRUCTIONS)
+		{
+			if (!token[j].compare(c_syntax::method_tab[i].name))
+				return j;
+			i++;
+		}
+		j ++;
+	}
+	return -1;
+}
 
 /**
  * @brief lists all methods instructions
@@ -436,14 +465,14 @@ const c_syntax::answer_header_tab_entry_t
 c_syntax::answer_header_tab[] = {
 	{ALLOW, "Allow"},
 	{CONTENT_LANGUAGE, "Content-Language"},
-	{CONTENT_LENGTH, "Content-Length"},
+	{A_CONTENT_LENGTH, "Content-Length"},
 	{CONTENT_LOCATION, "Content-Location"},
-	{CONTENT_TYPE, "Content-Type"},
-	{DATE, "Date"},
+	{A_CONTENT_TYPE, "Content-Type"},
+	{A_DATE, "Date"},
 	{LAST_MODIFIED, "Last-Modified"},
 	{LOCATION, "Location"},
 	{RETRY_AFTER, "Retry-After"},
 	{SERVER, "Server"},
-	{TRANSFER_ENCODING, "Transfer-Encoding"},
+	{A_TRANSFER_ENCODING, "Transfer-Encoding"},
 	{WWW_AUTHENTICATE, "WWW-Authenticate"},
 };

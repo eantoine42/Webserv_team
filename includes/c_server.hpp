@@ -34,7 +34,6 @@ class   c_server {
 		void						setName(std::vector<std::string> token);
 		void						setError(std::vector<std::string> token);
 		void						setClientBodySize(std::vector<std::string> token);
-		int 						correctServerInstruction(std::vector<std::string> token);
 		int							skipLocationBlock(std::string str, int count);
 		void						parseServer(std::string str, int &count);
 		int							getLocationBloc(std::string str, int &count);

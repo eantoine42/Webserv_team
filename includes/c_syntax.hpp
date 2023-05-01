@@ -60,15 +60,15 @@ enum request_header_name_t {
 enum answer_header_name_t {
 	ALLOW,
 	CONTENT_LANGUAGE,
-	CONTENT_LENGTH,
+	A_CONTENT_LENGTH,
 	CONTENT_LOCATION,
-	CONTENT_TYPE,
-	DATE,
+	A_CONTENT_TYPE,
+	A_DATE,
 	LAST_MODIFIED,
 	LOCATION,
 	RETRY_AFTER,
 	SERVER,
-	TRANSFER_ENCODING,
+	A_TRANSFER_ENCODING,
 	WWW_AUTHENTICATE
 };
 
@@ -122,10 +122,12 @@ class c_syntax {
 		static void 		formatConfFile(std::string &conf);
 		static char 		checkChar(std::string str);
 		static std::string 	intToString(int num);
-		static int 	correctInstruction(std::vector<std::string> token, int type);
+		static int 	correctServerInstruction(std::vector<std::string> token);
+		static int 	correctLocationInstruction(std::vector<std::string> token);
+		static int 	correctMethodInstruction(std::vector<std::string> token);
 
 	private:
-		c_syntax();
+		c_syntax(); 
 		c_syntax(const c_syntax& src);
 		c_syntax& operator=(const c_syntax& rhs);
 };

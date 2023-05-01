@@ -43,26 +43,7 @@
 	int									const &c_server::getClientBodySize() const{return (_client_body_size);}
 	std::vector<c_location>				const &c_server::getLocation() const{return (_location);}
 	
-/**
-	 * @brief Checks if the server directive are part of server or location block
-	 * 
-	 * @param token 
-	 * @return true 
-	 * @return false 
-	 */
-	int 	c_server::correctServerInstruction(std::vector<std::string> token)
-	{
-				int i = 0;
-		// check if the token corresponds to a valid instruction in server block
-		while (i < TOTAL_SERVER_INSTRUCTIONS)
-		{
-			if (!token[0].compare(c_syntax::server_instructions_tab[i].name))
-				return i;
-			i++;
-		}
-		if (c_syntax::isNothing(token[0]) || !token[0].compare("{"))
-			return TOTAL_SERVER_INSTRUCTIONS;
-		return -1;}
+
 
 /**
  * @brief returns the number of line of location bloc
@@ -126,7 +107,7 @@ int	c_server::getLocationBloc(std::string str, int &count)
 	std::string line = c_syntax::getLine(str, count);
 	if ((token = c_syntax::splitString(line, WHITESPACES)).empty())
 		return -1;
-	else if ((*this).correctServerInstruction(token) != LOCATION_INSTRUCTION)
+	else if (c_syntax::correctServerInstruction(token) != LOCATION_INSTRUCTION)
 		return -1;
 	else return 1;
 }
@@ -159,7 +140,7 @@ void	c_server::parseServer(std::string str, int &count)
 	std::string line = c_syntax::getLine(str, count);
 	if ((token = c_syntax::splitString(line, WHITESPACES)).empty())
 		return ;
-	else if ((instruct = (*this).correctServerInstruction(token)) != -1)
+	else if ((instruct = c_syntax::correctServerInstruction(token)) != -1)
 	{
 		if (instruct == LOCATION_INSTRUCTION)
 			count += skipLocationBlock(str, count);

@@ -104,7 +104,7 @@ void	c_location::parseLocation(std::string &line)
 	int instruct;
 	if ((token = c_syntax::splitString(line, WHITESPACES)).empty())
 		return;
-	else if ((instruct = (*this).correctLocationInstruction(token)) != -1 && instruct < TOTAL_LOCATION_INSTRUCTIONS)
+	else if ((instruct = c_syntax::correctLocationInstruction(token)) != -1 && instruct < TOTAL_LOCATION_INSTRUCTIONS)
 		(this->*funcs[instruct])(token);
 	else if (instruct == TOTAL_LOCATION_INSTRUCTIONS)
 		return;
@@ -113,45 +113,8 @@ void	c_location::parseLocation(std::string &line)
 }
 
 
-/**
- * @brief Checks if the location directive are part of location block
- * 
- * @param token 
- * @return true 
- * @return false 
- */
-int 	c_location::correctLocationInstruction(std::vector<std::string> token)
-{
-	int i = 0;
-	// check if the token corresponds to a valid instruction in server block
-	while (i < TOTAL_LOCATION_INSTRUCTIONS)
-	{
-		if (!token[0].compare(c_syntax::location_instructions_tab[i].name))
-			return i;
-		i++;
-	}
-	if (c_syntax::isNothing(token[0]) || !token[0].compare("{"))
-		return TOTAL_LOCATION_INSTRUCTIONS;
-	return -1;}
 
-int 	c_location::correctMethodInstruction(std::vector<std::string> token)
-{
-	size_t i = 0;
-	size_t j = 1;
-	token[token.size() - 1] = token[token.size() - 1].erase(token[token.size() - 1].size() - 1);
-	while (j < token.size())
-	{
-		i = 0;
-		while (i < TOTAL_METHODS_INSTRUCTIONS)
-		{
-			if (!token[j].compare(c_syntax::method_tab[i].name))
-				return j;
-			i++;
-		}
-		j ++;
-	}
-	return -1;
-}
+
 
 /*
 ** c_location setters
@@ -199,7 +162,7 @@ void	c_location::setIndex(std::vector<std::string> token)
 void	c_location::setAllowMethod(std::vector<std::string> token)
 {
 	_allow_method.clear();
-	if (correctMethodInstruction(token) == -1)
+	if (c_syntax::correctMethodInstruction(token) == -1)
 		throw(ConfFileParseError("Location bloc [" + c_syntax::intToString(_loc_index) + "] : Method not allowed"));
 	size_t i = 1;
 	for (; i < token.size() - 1; i++)

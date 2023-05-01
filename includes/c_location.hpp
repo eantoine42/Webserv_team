@@ -38,8 +38,6 @@ class   c_location {
 		void	setCgi(std::vector<std::string> token);
 		void	setClientBodySize(std::vector<std::string> token);
 		void	setErrorPages(std::vector<std::string> token);
-		int 	correctLocationInstruction(std::vector<std::string> token);
-		int 	correctMethodInstruction(std::vector<std::string> token);
 		typedef void (c_location::*loc_func)(std::vector<std::string> );
 		void init_vector_loc_fct(std::vector<loc_func> &funcs);
 
