@@ -49,3 +49,13 @@ enum status_code_t {
 
 
 #endif
+
+class response{
+
+	private :
+
+
+	public :
+	std::map<status_code_t, std::string> init_code_status();
+
+};
