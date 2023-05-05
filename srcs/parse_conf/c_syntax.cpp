@@ -476,3 +476,47 @@ syntax::answer_header_tab[] = {
 	{A_TRANSFER_ENCODING, "Transfer-Encoding"},
 	{WWW_AUTHENTICATE, "WWW-Authenticate"},
 };
+
+void syntax::fill_response_status_map(std::map<status_code_t, std::string> &map)
+{
+	map.insert(std::pair<status_code_t, std::string>(CONTINUE,"Continue"));
+	map.insert(std::pair<status_code_t, std::string>(SWITCHING_PROTOCOLS,"Switching Protocols"));
+	map.insert(std::pair<status_code_t, std::string>(OK,"OK"));
+	map.insert(std::pair<status_code_t, std::string>(CREATED,"Created"));
+	map.insert(std::pair<status_code_t, std::string>(ACCEPTED,"Accepted"));
+	map.insert(std::pair<status_code_t, std::string>(NON_AUTHORITATIVE_INFORMATION,"Non-Authoritative Information"));
+	map.insert(std::pair<status_code_t, std::string>(NO_CONTENT,"No Content"));
+	map.insert(std::pair<status_code_t, std::string>(RESET_CONTENT,"Reset Content"));
+	map.insert(std::pair<status_code_t, std::string>(PARTIAL_CONTENT,"Partial Content"));
+	map.insert(std::pair<status_code_t, std::string>(MULTIPLE_CHOICES,"Multiple Choices"));
+	map.insert(std::pair<status_code_t, std::string>(MOVED_PERMANENTLY,"Moved Permanently"));
+	map.insert(std::pair<status_code_t, std::string>(FOUND,"Found"));
+	map.insert(std::pair<status_code_t, std::string>(SEE_OTHER,"See Other"));
+	map.insert(std::pair<status_code_t, std::string>(NOT_MODIFIED,"Not Modified"));
+	map.insert(std::pair<status_code_t, std::string>(USE_PROXY,"Use Proxy"));
+	map.insert(std::pair<status_code_t, std::string>(TEMPORARY_REDIRECT,"Temporary Redirect"));
+	map.insert(std::pair<status_code_t, std::string>(BAD_REQUEST,"Bad Request"));
+	map.insert(std::pair<status_code_t, std::string>(UNAUTHORIZED,"Unauthorized"));
+	map.insert(std::pair<status_code_t, std::string>(PAYMENT_REQUIRED,"Payment Required"));
+	map.insert(std::pair<status_code_t, std::string>(FORBIDDEN,"Forbidden"));
+	map.insert(std::pair<status_code_t, std::string>(NOT_FOUND,"Not Found"));
+	map.insert(std::pair<status_code_t, std::string>(METHOD_NOT_ALLOWED,"Method Not Allowed"));
+	map.insert(std::pair<status_code_t, std::string>(NOT_ACCEPTABLE,"Not Acceptable"));
+	map.insert(std::pair<status_code_t, std::string>(PROXY_AUTHENTICATION_REQUIRED,"Proxy Authentication Required"));
+	map.insert(std::pair<status_code_t, std::string>(REQUEST_TIMEOUT,"Request Timeout"));
+	map.insert(std::pair<status_code_t, std::string>(CONFLICT,"Conflict"));
+	map.insert(std::pair<status_code_t, std::string>(GONE,"Gone"));
+	map.insert(std::pair<status_code_t, std::string>(LENGTH_REQUIRED,"Length Required"));
+	map.insert(std::pair<status_code_t, std::string>(PRECONDITION_FAILED,"Precondition Failed"));
+	map.insert(std::pair<status_code_t, std::string>(PAYLOAD_TOO_LARGE,"Payload Too Large"));
+	map.insert(std::pair<status_code_t, std::string>(URI_TOO_LONG,"URI Too Long"));
+	map.insert(std::pair<status_code_t, std::string>(UNSUPPORTED_MEDIA_TYPE,"Unsupported Media Type"));
+	map.insert(std::pair<status_code_t, std::string>(RANGE_NOT_SATISFIABLE,"Range Not Satisfiable"));
+	map.insert(std::pair<status_code_t, std::string>(EXPECTATION_FAILED,"Expectation Failed"));
+	map.insert(std::pair<status_code_t, std::string>(INTERNAL_SERVER_ERROR,"Internal Server Error"));
+	map.insert(std::pair<status_code_t, std::string>(NOT_IMPLEMENTED,"Not Implemented"));
+	map.insert(std::pair<status_code_t, std::string>(BAD_GATEWAY,"Bad Gateway"));
+	map.insert(std::pair<status_code_t, std::string>(SERVICE_UNAVAILABLE,"Service Unavailable"));
+	map.insert(std::pair<status_code_t, std::string>(GATEWAY_TIMEOUT,"Gateway Timeout"));
+	map.insert(std::pair<status_code_t, std::string>(HTTP_VERSION_NOT_SUPPORTED,"HTTP Version Not Supported"));
+}

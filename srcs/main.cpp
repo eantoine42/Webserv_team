@@ -29,5 +29,7 @@ int     main(int argc, const char **argv) {
         std::cerr << "Error config: " << e.what() << std::endl;
         return (1);
     }
+
+	syntax::fill_response_status_map(map);
     return (0);
 }

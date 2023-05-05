@@ -72,6 +72,50 @@ enum answer_header_name_t {
 	WWW_AUTHENTICATE
 };
 
+enum status_code_t {
+	UNDEFINED,
+	CONTINUE = 100,
+	SWITCHING_PROTOCOLS,
+	OK = 200,
+	CREATED,
+	ACCEPTED,
+	NON_AUTHORITATIVE_INFORMATION,
+	NO_CONTENT,
+	RESET_CONTENT,
+	PARTIAL_CONTENT,
+	MULTIPLE_CHOICES = 300,
+	MOVED_PERMANENTLY,
+	FOUND,
+	SEE_OTHER,
+	NOT_MODIFIED,
+	USE_PROXY,
+	TEMPORARY_REDIRECT = 307,
+	BAD_REQUEST = 400,
+	UNAUTHORIZED,
+	PAYMENT_REQUIRED,
+	FORBIDDEN,
+	NOT_FOUND,
+	METHOD_NOT_ALLOWED,
+	NOT_ACCEPTABLE,
+	PROXY_AUTHENTICATION_REQUIRED,
+	REQUEST_TIMEOUT,
+	CONFLICT,
+	GONE,
+	LENGTH_REQUIRED,
+	PRECONDITION_FAILED,
+	PAYLOAD_TOO_LARGE,
+	URI_TOO_LONG,
+	UNSUPPORTED_MEDIA_TYPE,
+	RANGE_NOT_SATISFIABLE,
+	EXPECTATION_FAILED,
+	INTERNAL_SERVER_ERROR = 500,
+	NOT_IMPLEMENTED,
+	BAD_GATEWAY,
+	SERVICE_UNAVAILABLE,
+	GATEWAY_TIMEOUT,
+	HTTP_VERSION_NOT_SUPPORTED
+};
+
 class syntax {
 	public:
 		~syntax();
@@ -102,6 +146,7 @@ class syntax {
 			std::string		name;
 		};
 
+		static std::map<status_code_t, std::string> _response_status_map;
 		static const method_tab_entry_t					method_tab[];
 		static const server_instruction_tab_entry_t 	server_instructions_tab[];
 		static const location_instruction_tab_entry_t 	location_instructions_tab[];
@@ -125,6 +170,7 @@ class syntax {
 		static int 	correctServerInstruction(std::vector<std::string> token);
 		static int 	correctLocationInstruction(std::vector<std::string> token);
 		static int 	correctMethodInstruction(std::vector<std::string> token);
+		static void fill_response_status_map(std::map<status_code_t, std::string> &map);
 
 	private:
 		syntax(); 
