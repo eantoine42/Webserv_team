@@ -14,6 +14,7 @@
 #include <signal.h>
 #include <sys/epoll.h> // epoll
 #include <sys/stat.h>
+#include <netdb.h> //getprotobyname
 
 // C++ library
 
@@ -36,4 +37,8 @@
 #include "exception.hpp"
 #include "utils.hpp"
 #include "c_syntax.hpp"
+#include "server.hpp"
+
+# define MAX_CLIENT 128
+
 #endif

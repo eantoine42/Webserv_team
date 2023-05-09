@@ -19,19 +19,24 @@ HTTP_PATH = http/
 
 HTTP_FILE = response.cpp
 
+SERVER_PATH = server/
+
+SERVER_FILE = server.cpp
+
 SRCS_PATH = srcs/
 
 SRCS_FILE = main.cpp utils.cpp
 
 SRCS_FILE += $(addprefix $(PARSE_CONF_PATH), $(PARSE_CONF_FILE))
 SRCS_FILE += $(addprefix $(DEBUG_PATH), $(DEBUG_FILE))
+SRCS_FILE += $(addprefix $(SERVER_PATH), $(SERVER_FILE))
 
 SRCS = $(addprefix $(SRCS_PATH), $(SRCS_FILE))
 
 OBJS = $(SRCS:.cpp=.o)
 
 HEADER_FILE = webserv.hpp c_debugger.hpp c_location.hpp c_server.hpp \
- parse_conf.hpp exception.hpp utils.hpp c_syntax.hpp response.hpp
+ parse_conf.hpp exception.hpp utils.hpp c_syntax.hpp response.hpp server.hpp
 
 HEADER_PATH = includes/
 

@@ -9,6 +9,25 @@ static int  printUsage(char const *const prog_name) {
     return (1);
 }
 
+static int process_server(std::vector<server> serverlist)
+{
+		std::map<int, server *> serverFd;
+	
+	try
+	{
+		serverFd = createServerSockets(serverlist);
+		//start_server(serverFd);
+	}
+	catch(const std::exception& e)
+	{
+		 std::cerr << "Error Server Execution: " << e.what() << std::endl;
+        return (1);
+	}
+	return (0);
+}
+
+
+
 int     main(int argc, const char **argv) {
     std::vector<server> serverlist;
 	argc = 1;
@@ -29,7 +48,5 @@ int     main(int argc, const char **argv) {
         std::cerr << "Error config: " << e.what() << std::endl;
         return (1);
     }
-
-	syntax::fill_response_status_map(map);
-    return (0);
+	return (process_server(serverlist));
 }

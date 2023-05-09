@@ -98,7 +98,25 @@ class ConfFileParseError : public std::exception
 
 		char const	*what() const throw()
 		{
-			std::cerr << "Configuration File Parse Error" << std::endl;
+			std::cerr << "Configuration File Parse Error :" << std::endl;
+			return _msg.c_str();
+		}
+};
+
+class SetServerException : public std::exception
+{
+	private:
+		std::string	_msg;
+
+	public:
+		SetServerException(std::string msg)
+		:	_msg(msg) {}
+
+		~SetServerException() throw() {};
+
+		char const	*what() const throw()
+		{
+			std::cerr << "Setting Server Error :" << std::endl;
 			return _msg.c_str();
 		}
 };
