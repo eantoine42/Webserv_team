@@ -6,7 +6,7 @@
 /*   By: lfrederi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 14:33:20 by lfrederi          #+#    #+#             */
-/*   Updated: 2023/05/08 22:47:59 by lfrederi         ###   ########.fr       */
+/*   Updated: 2023/05/09 19:11:38 by lfrederi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 
 #include <iostream>
 #include <exception>
+#include <stdexcept>
+#include <string>
 
 #define BUFFER_SIZE 1080
 
@@ -32,19 +34,21 @@ class Server
 		void	serverInit(short portNumber);
 		void	listening() const;
 
-		class ServerInitException : public std::exception
+		class ServerInitException : std::exception
 		{
 			public:
-				virtual const char * what(void) const throw();
+				ServerInitException(std::string const message);
+				
+				virtual const char * what() const throw();
+
+			private:
+				const std::string _message;
 		};
 
 	private:
-		
 		int		_listenerFd;
 
 };
-
-std::ostream & operator<<(std::ostream & out, Server const & server);
 
 #endif
 
