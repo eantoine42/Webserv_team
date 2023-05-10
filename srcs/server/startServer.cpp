@@ -1,9 +1,8 @@
 #include "../../includes/startServer.hpp"
 
-
 void	start_server(std::map<int, server *> &serverFd)
 {
-	int	epoll_fd = create_epoll(fd_of_servers);
+	int	epoll_fd = create_epoll(serverFd);
 	struct epoll_event	eventlist[MAX_EVENTS];
 	std::map<int, ClientInfo> fd_of_clients;
 
@@ -18,8 +17,8 @@ void	start_server(std::map<int, server *> &serverFd)
 				|| (eventlist[i].events & EPOLLHUP)
 				|| (eventlist[i].events & EPOLLERR)) // client quit
 				delete_client_from_epoll(fd_of_clients, epoll_fd, eventlist[i].data.fd);
-			else if (fd_of_servers.find(eventlist[i].data.fd) != fd_of_servers.end()) // event of server means new client connected
-				accept_new_client(epoll_fd, eventlist[i].data.fd, fd_of_clients, fd_of_servers);
+			else if (serverFd.find(eventlist[i].data.fd) != serverFd.end()) // event of server means new client connected
+				accept_new_client(epoll_fd, eventlist[i].data.fd, fd_of_clients, serverFd);
 			else if (eventlist[i].events & EPOLLIN) // there is new input from old client
 			{
 				std::map<int, ClientInfo>::iterator it = fd_of_clients.find(eventlist[i].data.fd);

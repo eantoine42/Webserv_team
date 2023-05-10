@@ -121,4 +121,22 @@ class SetServerException : public std::exception
 		}
 };
 
+class RunServerException : public std::exception
+{
+	private:
+		std::string	_msg;
+
+	public:
+		RunServerException(std::string msg)
+		:	_msg(msg) {}
+
+		~RunServerException() throw() {};
+
+		char const	*what() const throw()
+		{
+			std::cerr << "Running Server Error :" << std::endl;
+			return _msg.c_str();
+		}
+};
+
 #endif

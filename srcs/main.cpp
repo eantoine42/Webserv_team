@@ -16,7 +16,8 @@ static int process_server(std::vector<server> serverlist)
 	try
 	{
 		serverFd = createServerSockets(serverlist);
-		//start_server(serverFd);
+		// Servers are in a map with socket number as index, ans server as content, ready to go!
+		start_server(serverFd);
 	}
 	catch(const std::exception& e)
 	{
