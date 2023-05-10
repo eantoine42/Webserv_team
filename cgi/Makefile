@@ -3,7 +3,8 @@ NAME = webserv
 CXX = c++
 COLOR = \0033[1;35m
 
-CXXFLAGS = -Wall -Werror -Wextra -O3 -fsanitize=address
+CXXFLAGS = -Wall -Werror -Wextra -O3
+# CXXFLAGS = -Wall -Werror -Wextra -std=c++98 -O3 -fsanitize=address
 #CXXFLAGS = -g -fPIE -std=c++98  -O3  --no-warnings
 
 
