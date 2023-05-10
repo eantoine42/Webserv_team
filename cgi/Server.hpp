@@ -6,7 +6,7 @@
 /*   By: lfrederi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 14:33:20 by lfrederi          #+#    #+#             */
-/*   Updated: 2023/05/10 16:53:38 by lfrederi         ###   ########.fr       */
+/*   Updated: 2023/05/10 21:58:59 by lfrederi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,13 @@
 
 class Server
 {
+	private:
+		int							_listenerFd;
+		std::vector<struct pollfd>	_fds;
+
+		void	readRequest(pollfd & pollfd);
+		void	writeResponse(pollfd & pollfd);
+
 	public:
 		
 		Server(void);
@@ -38,19 +45,14 @@ class Server
 		{
 			public:
 				ServerInitException(std::string const message);
-				
+				virtual ~ServerInitException() throw();
+
 				virtual const char * what() const throw();
 
 			private:
 				const std::string _message;
 		};
 
-	private:
-		int							_listenerFd;
-		std::vector<struct pollfd>	_fds;
-
-		void	readRequest(pollfd & pollfd);
-		void	writeResponse(pollfd & pollfd);
 		
 };
 

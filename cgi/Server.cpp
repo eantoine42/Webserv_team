@@ -6,12 +6,13 @@
 /*   By: lfrederi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 14:35:40 by lfrederi          #+#    #+#             */
-/*   Updated: 2023/05/10 16:54:09 by lfrederi         ###   ########.fr       */
+/*   Updated: 2023/05/10 17:41:15 by lfrederi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 
+#include <cstdio>
 #include <iostream>
 #include <cerrno>
 #include <sys/poll.h>
@@ -24,8 +25,8 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <poll.h>
-
 #include <unistd.h>
+#include <stdlib.h>
 
 /* ************************************************************************** */
 //						           PUBLIC									  //
@@ -76,7 +77,8 @@ void	Server::serverInit(short portNumber)
 	if (listen(this->_listenerFd, 10) < 0)
 		throw ServerInitException(std::strerror(errno));
 
-	this->_fds.push_back(pollfd{this->_listenerFd, POLLIN, 0});
+	pollfd serverFd = {this->_listenerFd, POLLIN, 0};
+	this->_fds.push_back(serverFd);
 	std::cout << "The server is ready to listening on port " << portNumber << std::endl;
 }
 
@@ -135,6 +137,9 @@ Server::ServerInitException::ServerInitException(std::string const message)
 	: _message(message)
 {}
 
+Server::ServerInitException::~ServerInitException() throw()
+{}
+
 const char *	Server::ServerInitException::what() const throw()
 {
 	return this->_message.c_str();
@@ -153,7 +158,10 @@ void	Server::readRequest(pollfd & fd)
 		if (acceptFd < 0)
 			std::cerr << "Accept: " << std::strerror(errno) << std::endl;
 		else
-			this->_fds.push_back(pollfd{acceptFd, POLLIN, 0});
+		{
+			pollfd connectFd = {acceptFd, POLLIN, 0};
+			this->_fds.push_back(connectFd);
+		}
 	}
 	else
 	{
@@ -192,7 +200,9 @@ void	Server::writeResponse(pollfd & fd)
 		file.read(buffer, size);
 		buffer[file.gcount()] = '\0';
 
-		result.append(std::to_string(size));
+		char integer[20];
+		std::sprintf(integer, "%d", size);
+		result.append(integer);
 		result.append("\r\n\r\n");
 		result.append(buffer);
 
@@ -204,95 +214,6 @@ void	Server::writeResponse(pollfd & fd)
 	}
 }
 
-void	Server::handleError(pollfd & fd, int position)
-{
-	std::cout << "Err err\n";
-	close(fd.fd);
-	this->_fds.erase(this->_fds.begin() + position);
-}
-
-	/* ************************************************************************** */
-	//						           FUNCTIONS								  //
-	/* ************************************************************************** */
-
-	/* { */
-	/* 	std::cout << i << ": revents -> " << first[i].revents << " fd -> " << first[i].fd << std::endl; */
-	/* 	if (first[i].revents == 0) */
-	/* 		continue; */
-	/*  */
-	/* 	if (first[i].revents & POLLIN) */
-	/* 	{ */
-	/* 		if (first[i].fd == this->_listenerFd) */
-	/* 		{ */
-	/* 			int acceptfd = accept(this->_listenerFd, NULL, NULL); */
-	/* 			if (acceptfd > 0) */
-	/* 			{ */
-	/* 				std::cout << "Accept ok" << std::endl; */
-	/* 				fds.push_back(pollfd{acceptfd, POLLIN, 0}); */
-	/* 				first = &fds.front(); */
-	/* 			} */
-	/* 			else */
-	/* 				std::cerr << "Accept failed" << std::endl; */
-	/* 		} */
-	/* 		else */
-	/* 		{ */
-	/* 			char buffer[BUFFER_SIZE]; */
-	/* 			int	bytesRead; */
-	/*  */
-	/* 			if ((bytesRead = read(first[i].fd, buffer, BUFFER_SIZE - 1)) <= 0) */
-	/* 			{ */
-	/* 				std::cerr << "Reading failed" << std::endl; */
-	/* 				close(fds[i].fd); */
-	/* 				//fds.erase(fds.begin() + i); */
-	/* 				continue ; */
-	/* 			} */
-	/* 			buffer[bytesRead] = '\0'; */
-	/* 			std::cout << buffer; */
-	/*  */
-	/* 			first[i].events = POLLOUT; */
-	/* 		} */
-	/* 	} */
-	/* 	else if (fds[i].revents & POLLOUT) */
-	/* 	{ */
-	/*  */
-	/* 		std::ifstream file("sample.json"); */
-	/* 		if (!file.good()) */
-	/* 			std::cerr << "Error while opening file" << std::endl; */
-	/* 		else */
-	/* 		{ */
-	/* 			std::string result; */
-	/* 			const char * response = "HTTP/1.1 200 OK\r\nContent-type: application/json\r\nContent-length: "; */
-	/*  */
-	/* 			result.append(response); */
-	/*  */
-	/* 			file.seekg(0, file.end); */
-	/* 			int size = file.tellg(); */
-	/* 			file.seekg(0, file.beg); */
-	/*  */
-	/* 			char * buffer = new char [size + 1]; */
-	/* 			file.read(buffer, size); */
-	/* 			buffer[file.gcount()] = '\0'; */
-	/*  */
-	/* 			result.append(std::to_string(size)); */
-	/* 			result.append("\r\n\r\n"); */
-	/* 			result.append(buffer); */
-	/*  */
-	/* 			if (write(fds[i].fd, result.c_str(), result.length()) < 0) */
-	/* 				std::cerr << "Error writting" << std::endl; */
-	/* 			file.close(); */
-	/* 			delete [] buffer; */
-	/* 			close(fds[i].fd); */
-	/* 		} */
-	/* 	} */
-	/* 	else  */
-	/* 	{ */
-	/* 		if (fds[i].fd != this->_listenerFd) */
-	/* 		{ */
-	/* 			std::cout << "Err err\n"; */
-	/* 			close(fds[i].fd); */
-	/* 			fds.erase(fds.begin() + i); */
-	/* 			//	exit(1); */
-	/* 		} */
-	/* 	} */
-	/* 	//std::cout << fds.size() << std::endl; */
-	/* } */
+/* ************************************************************************** */
+//						           FUNCTIONS								  //
+/* ************************************************************************** */
