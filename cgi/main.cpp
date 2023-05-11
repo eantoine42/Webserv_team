@@ -6,7 +6,7 @@
 /*   By: lfrederi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 14:42:00 by lfrederi          #+#    #+#             */
-/*   Updated: 2023/05/10 18:48:36 by lfrederi         ###   ########.fr       */
+/*   Updated: 2023/05/11 12:33:15 by lfrederi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,6 @@ int main()
 		return (1);
 	}
 	
-	Request reauest;
-	reauest.getRawData();
-
 	server.listening();
 
 

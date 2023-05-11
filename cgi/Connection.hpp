@@ -6,7 +6,7 @@
 /*   By: lfrederi <lfrederi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 22:02:51 by lfrederi          #+#    #+#             */
-/*   Updated: 2023/05/10 22:09:00 by lfrederi         ###   ########.fr       */
+/*   Updated: 2023/05/11 15:03:33 by lfrederi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,17 +20,27 @@ class Connection
 {
 	private:
 		int			_socketFd;
+		std::string	_requestRawData;
 		Request		_request;
 		Response	_response;
 
-		Connection(void);
 
 	public:
+		Connection(void);
 		~Connection(void);
 		Connection(Connection const & copy);
 		Connection &	operator=(Connection const & rhs);
 
 		Connection(int socketFd);
+
+		bool	readRequest();
+		bool	isRequestTerminated();
+
+		Request &		getRequest();
+		std::string &	getRequestRawData();
+		int				getSocketFd();
+		void			setRequest(Request & request);
+		void			setSocketFd(int socketFd);
 };
 
 #endif

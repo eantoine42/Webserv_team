@@ -6,7 +6,7 @@
 /*   By: lfrederi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 14:33:20 by lfrederi          #+#    #+#             */
-/*   Updated: 2023/05/10 21:58:59 by lfrederi         ###   ########.fr       */
+/*   Updated: 2023/05/11 15:29:55 by lfrederi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,9 @@
 #include <exception>
 #include <string>
 #include <vector>
+#include <map>
+
+#include "Connection.hpp"
 
 #define BUFFER_SIZE 1080
 #define	NO_EVENTS	0
@@ -23,11 +26,13 @@
 class Server
 {
 	private:
+		// TODO: Change to vector to many servers
 		int							_listenerFd;
 		std::vector<struct pollfd>	_fds;
+		std::map<int, Connection>	_connections;
 
-		void	readRequest(pollfd & pollfd);
-		void	writeResponse(pollfd & pollfd);
+		void	readRequest(int fd);
+		void	writeResponse(int fd);
 
 	public:
 		

@@ -3,7 +3,7 @@ NAME = webserv
 CXX = c++
 COLOR = \0033[1;35m
 
-CXXFLAGS = -Wall -Werror -Wextra -std=c++98 -O3 -fsanitize=address
+CXXFLAGS = -Wall -Werror -Wextra -std=c++98 -O3 -fsanitize=address -g
 # CXXFLAGS = -Wall -Werror -Wextra -O3
 #CXXFLAGS = -g -fPIE -std=c++98  -O3  --no-warnings
 
@@ -29,13 +29,13 @@ CXXFLAGS = -Wall -Werror -Wextra -std=c++98 -O3 -fsanitize=address
 #
 # SRCS = $(addprefix $(SRCS_PATH), $(SRCS_FILE))
 #
-SRCS = main.cpp Server.cpp AHTTPMessage.cpp Request.cpp Response.cpp Connection.cpp
+SRCS = main.cpp Server.cpp AHTTPMessage.cpp Request.cpp Response.cpp Connection.cpp MessageFactory.cpp
 
 OBJS = $(SRCS:.cpp=.o)
 
 # HEADER_FILE = webserv.hpp c_debugger.hpp c_location.hpp c_server.hpp \
 #  parse_conf.hpp exception.hpp utils.hpp c_syntax.hpp response.hpp
-HEADER = Server.hpp AHTTPMessage.hpp Request.hpp Response.cpp Connection.hpp
+HEADER = Server.hpp AHTTPMessage.hpp Request.hpp Response.cpp Connection.hpp MessageFactory.hpp
 
 HEADER_PATH = ./
 

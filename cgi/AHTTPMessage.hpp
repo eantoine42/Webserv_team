@@ -6,7 +6,7 @@
 /*   By: lfrederi <lfrederi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 17:48:26 by lfrederi          #+#    #+#             */
-/*   Updated: 2023/05/10 22:07:41 by lfrederi         ###   ########.fr       */
+/*   Updated: 2023/05/10 23:02:29 by lfrederi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 
 #include <string>
 #include <map>
+
+#define BUFFER_SIZE 1080
 
 class AHTTPMessage
 {
@@ -31,6 +33,9 @@ class AHTTPMessage
 
 	public:
 		std::string &	getRawData();
+
+		bool	readRawData(int socketFd);
+		bool	writeRawData();
 };
 
 #endif

@@ -1,65 +1,56 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Request.cpp                                        :+:      :+:    :+:   */
+/*   MessageFactory.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lfrederi <lfrederi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/10 18:32:48 by lfrederi          #+#    #+#             */
-/*   Updated: 2023/05/11 11:12:54 by lfrederi         ###   ########.fr       */
+/*   Created: 2023/05/11 10:17:46 by lfrederi          #+#    #+#             */
+/*   Updated: 2023/05/11 12:35:21 by lfrederi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Request.hpp"
-#include <string>
+#include "MessageFactory.hpp"
+#include <map>
 
 /* ************************************************************************** */
 //						           PUBLIC									  //
 /* ************************************************************************** */
 
 // Canonical form
-Request::Request(void)
+MessageFactory::MessageFactory(void)
 {}
 
-Request::~Request(void)
+MessageFactory::~MessageFactory(void)
 {}
 
-Request::Request(Request const & copy)
-	:	_httpMethod(copy._httpMethod),
-		_pathRequest(copy._pathRequest),
-		_httpVersion(copy._httpVersion),
-		_headers(copy._headers),
-		_messageBody(copy._messageBody)
-{}
+MessageFactory::MessageFactory(MessageFactory const & copy)
+{
+	(void) copy;
+}
 
-Request & Request::operator=(Request const & rhs)
+MessageFactory & MessageFactory::operator=(MessageFactory const & rhs)
 {
 	if (this != &rhs)
-	{
-		this->_messageBody = rhs._messageBody;
-	}
+	{}
 
 	return (*this);
 }
 
-// Constructor
-Request::Request(std::string httpMethod,
-				std::string pathRequest,
-				std::string httpVersion,
-				std::map<std::string, std::string> headers,
-				std::string messageBody)
-	:	_httpMethod(httpMethod),
-		_pathRequest(pathRequest),
-		_httpVersion(httpVersion),
-		_headers(headers),
-		_messageBody(messageBody)
-{}
-
-// Members methods
-std::string &	Request::getMessageBody()
+// Members static methods
+Request *	MessageFactory::createRequest(std::string const & rawData)
 {
-	return this->_messageBody;
+	(void) rawData;
+
+	std::map<std::string, std::string> headers;	
+	headers["Host"] = "localhost:18000";
+	headers["User-Agent"] = "curl/7.81.0";
+	headers["Accept"] = "*/*";
+
+	return new Request("GET", "/index.php", "HTTP/1.1", headers, "");	
 }
+
+
 /* ************************************************************************** */
 //						           PRIVATE									  //
 /* ************************************************************************** */
@@ -70,3 +61,4 @@ std::string &	Request::getMessageBody()
 // Static methods
 
 
+// Constructor

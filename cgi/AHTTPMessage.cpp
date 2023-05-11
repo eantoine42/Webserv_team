@@ -6,11 +6,16 @@
 /*   By: lfrederi <lfrederi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 18:07:08 by lfrederi          #+#    #+#             */
-/*   Updated: 2023/05/10 18:47:40 by lfrederi         ###   ########.fr       */
+/*   Updated: 2023/05/10 23:28:51 by lfrederi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "AHTTPMessage.hpp"
+
+#include <iostream>
+#include <cerrno>
+#include <cstring>
+#include <unistd.h>
 
 /* ************************************************************************** */
 //						           PUBLIC									  //
@@ -25,9 +30,9 @@ AHTTPMessage::~AHTTPMessage(void)
 
 AHTTPMessage::AHTTPMessage(AHTTPMessage const & copy)
 	:	_rawData(copy._rawData),
-		_httpVersion(copy._httpVersion),
-		_headers(copy._headers),
-		_bodyMessage(copy._bodyMessage)
+	_httpVersion(copy._httpVersion),
+	_headers(copy._headers),
+	_bodyMessage(copy._bodyMessage)
 {}
 
 AHTTPMessage & AHTTPMessage::operator=(AHTTPMessage const & rhs)
@@ -47,6 +52,21 @@ AHTTPMessage & AHTTPMessage::operator=(AHTTPMessage const & rhs)
 std::string &	AHTTPMessage::getRawData()
 {
 	return (this->_rawData);
+}
+
+bool	AHTTPMessage::readRawData(int socketFd)
+{
+	char buffer[BUFFER_SIZE];
+	int	bytesRead;
+
+	if ((bytesRead = read(socketFd, buffer, BUFFER_SIZE - 1)) <=0)
+	{
+		std::cerr << "Read: " << std::strerror(errno) << std::endl;
+		return false;
+	}
+	buffer[bytesRead] = '\0';
+	std::cout << buffer;
+	return true;
 }
 
 /* ************************************************************************** */
