@@ -6,7 +6,7 @@
 /*   By: lfrederi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 14:35:40 by lfrederi          #+#    #+#             */
-/*   Updated: 2023/05/11 17:28:19 by lfrederi         ###   ########.fr       */
+/*   Updated: 2023/05/12 20:25:08 by lfrederi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,16 @@ int		Server::getListenerFd() const
 	return this->_listenerFd;
 }
 
+std::vector<pollfd> &		Server::getFds()
+{
+	return this->_fds;
+}
+
+std::map<int, Connection> &	Server::getConnections()
+{
+	return this->_connections;
+}
+
 void	Server::serverInit(short portNumber)
 {
 	struct sockaddr_in addr;
@@ -85,80 +95,12 @@ void	Server::serverInit(short portNumber)
 	std::cout << "The server is ready to listening on port " << portNumber << std::endl;
 }
 
-void	Server::listening()
-{
-	int				nFds;
-	struct pollfd	*firstFd;
-
-	while (true)
-	{
-		nFds = this->_fds.size();
-		firstFd = &this->_fds.front();
-		poll(firstFd, nFds, -1);
-
-		/* std::cout << "Poll received events" << std::endl; */
-
-		int i = 0;
-		while (i < nFds)
-		{
-			/* std::cout << "Revents is equal to " << firstFd[i].revents << "on fd -> " << firstFd[i].fd << std::endl; */
-			switch (firstFd[i].revents) 
-			{
-				case NO_EVENTS:
-					/* std::cout << "Revents is empty in this fd " << firstFd[i].fd << std::endl; */
-					break;
-				case POLLIN:
-					readRequest(firstFd[i].fd);
-					firstFd = &this->_fds.front();
-					if (firstFd[i].fd != this->_listenerFd)
-						firstFd[i].events = POLLOUT;
-					break;
-				case POLLOUT:
-					writeResponse(firstFd[i].fd);
-					firstFd[i].events = POLLRDHUP;
-					break;
-				case POLLNVAL:
-					std::cout << "POLLNVAL" << std::endl;
-					this->_connections.erase((this->_fds.begin() + i)->fd);
-					this->_fds.erase(this->_fds.begin() + i);
-					nFds--;
-					firstFd = &this->_fds.front();
-					i--;
-					break ;
-				case POLLRDHUP:
-					std::cout << "POLLRDHUP" << std::endl;
-					close(firstFd[i].fd);
-					this->_connections.erase((this->_fds.begin() + i)->fd);
-					this->_fds.erase(this->_fds.begin() + i);
-					nFds--;
-					firstFd = &this->_fds.front();
-					i--;
-					break ;
-				default:
-					std::cout << "Default" << std::endl;
-					/* close(firstFd[i].fd); */
-					/* this->_fds.erase(this->_fds.begin() + i); */
-					/* nFds--; */
-					/* firstFd = &this->_fds.front(); */
-					/* this->_connections.erase((this->_fds.begin() + i)->fd); */
-					/* i--; */
-					break ;
-			}
-			i++;
-		}
-	}
-}
-
-/* ************************************************************************** */
-//						           PRIVATE									  //
-/* ************************************************************************** */
 // Members methods
-
-void	Server::readRequest(int fd)
+void	Server::readRequest(pollfd & pollFd)
 {
-	if (fd == this->_listenerFd)
+	if (pollFd.fd == this->_listenerFd)
 	{
-		int acceptFd = accept(fd, NULL, NULL);
+		int acceptFd = accept(pollFd.fd, NULL, NULL);
 		if (acceptFd < 0)
 			std::cerr << "Accept: " << std::strerror(errno) << std::endl;
 		else
@@ -167,63 +109,45 @@ void	Server::readRequest(int fd)
 			this->_fds.push_back(connectFd);
 
 			Connection co(acceptFd);
-			this->_connections.insert(std::pair<int, Connection>(acceptFd, co));
+			this->_connections[acceptFd] = co;
 		}
 	}
 	else
 	{
-		if (this->_connections.find(fd) == this->_connections.end()) {
-			std::cout << "OUAAAAAAAAAAAAAAAAA --> " << fd << std::endl;
-			exit(3);
-		}
+		Connection & connection = this->_connections[pollFd.fd]; 
 		// Read request data
-		if (!this->_connections[fd].readRequest())
-			close(fd);
+		if (!connection.readRequest())
+		{
+			close(pollFd.fd);
+			this->_connections[pollFd.fd].setOpen(false);
+		}
 		else
 		{
-			if (!this->_connections[fd].isRequestTerminated())
+			if (!connection.isRequestTerminated())
 				return ;
 
-			std::string & rawData = this->_connections[fd].getRequestRawData();
-			// TODO: Check
+			std::string & rawData = connection.getRequestRawData();
+			// TODO: Create a method in Request
 			Request * request = MessageFactory::createRequest(rawData);	
-			this->_connections[fd].setRequest(*request);	
+			connection.setRequest(*request);	
 			delete request;
+			pollFd.events = POLLOUT;
 		}
 	}
 }
 
-void	Server::writeResponse(int fd)
+void	Server::writeResponse(pollfd & pollFd)
 {
-	std::ifstream file("sample.json");
-	if (!file.good())
-		std::cerr << "Error while opening file" << std::endl;
-	else
+	std::string response = MessageFactory::createResponse();
+
+	if (write(pollFd.fd, response.c_str(), response.length()) < 0)
 	{
-		std::string result;
-		const char * response = "HTTP/1.1 200 OK\r\nContent-type: application/json\r\nContent-length: ";
-
-		result.append(response);
-
-		file.seekg(0, file.end);
-		int size = file.tellg();
-		file.seekg(0, file.beg);
-
-		char * buffer = new char [size + 1];
-		file.read(buffer, size);
-		buffer[file.gcount()] = '\0';
-
-		char integer[20];
-		std::sprintf(integer, "%d", size);
-		result.append(integer);
-		result.append("\r\n\r\n");
-		result.append(buffer);
-
-		if (write(fd, result.c_str(), result.length()) < 0)
-			std::cerr << "Error writting" << std::endl;
-		file.close();
-		delete [] buffer;
+		close(pollFd.fd);
+		this->_connections[pollFd.fd].setOpen(false);
+		std::cerr << "Error writting" << std::endl;
 	}
+	// Verifier que la reponse soit complete
+	pollFd.events = POLLRDHUP; 
 }
 
 /* ************************************************************************** */

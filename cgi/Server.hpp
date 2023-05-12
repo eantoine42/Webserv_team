@@ -6,7 +6,7 @@
 /*   By: lfrederi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 14:33:20 by lfrederi          #+#    #+#             */
-/*   Updated: 2023/05/11 15:29:55 by lfrederi         ###   ########.fr       */
+/*   Updated: 2023/05/12 19:05:02 by lfrederi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,6 @@ class Server
 		std::vector<struct pollfd>	_fds;
 		std::map<int, Connection>	_connections;
 
-		void	readRequest(int fd);
-		void	writeResponse(int fd);
-
 	public:
 		
 		Server(void);
@@ -41,10 +38,16 @@ class Server
 		~Server(void);
 		Server &	operator=(Server const & rhs);
 
-		int		getListenerFd() const;
+		// Getters Setters
+		int							getListenerFd() const;
+		std::vector<pollfd> &		getFds();
+		std::map<int, Connection> &	getConnections();
+		
 
 		void	serverInit(short portNumber);
-		void	listening();
+		void	readRequest(pollfd & poolFd);
+		void	writeResponse(pollfd & pollFd);
+		bool	isListenerFd(int fd);
 
 		class ServerInitException : std::exception
 		{
