@@ -8,7 +8,7 @@
 
 # define DEBUG_START(ACTIVATE) Debugger::start(ACTIVATE)
 # define DEBUG_STATUS (Debugger::_webserv_debugger.getIsActive() == true)
-# define DEBUG_COUT(MESSAGE) if (Debugger::_webserv_debugger.getIsActive() == true) std::cerr << "[" << Debugger::get_date() << "] " << MESSAGE << std::endl
+# define DEBUG_COUT(MESSAGE) if (Debugger::_webserv_debugger.getIsActive() == true) std::cerr << "[" << Debugger::getDate() << "] " << MESSAGE << std::endl
 
 class Debugger
 {

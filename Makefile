@@ -9,7 +9,7 @@ CXXFLAGS = -Wall -Werror -Wextra -std=c++98  -O3 -fsanitize=address
 
 PARSE_CONF_PATH = parse_conf/
 
-PARSE_CONF_FILE = c_location.cpp c_server.cpp parse_conf.cpp c_syntax.cpp
+PARSE_CONF_FILE = c_location.cpp c_server.cpp parse_conf.cpp c_syntax.cpp 
 
 DEBUG_PATH = debug/
 
@@ -21,7 +21,7 @@ HTTP_FILE = response.cpp
 
 SERVER_PATH = server/
 
-SERVER_FILE = server.cpp
+SERVER_FILE = server.cpp startServer.cpp request_op.cpp c_client.cpp 
 
 SRCS_PATH = srcs/
 
@@ -36,7 +36,8 @@ SRCS = $(addprefix $(SRCS_PATH), $(SRCS_FILE))
 OBJS = $(SRCS:.cpp=.o)
 
 HEADER_FILE = webserv.hpp c_debugger.hpp c_location.hpp c_server.hpp \
- parse_conf.hpp exception.hpp utils.hpp c_syntax.hpp response.hpp server.hpp
+ parse_conf.hpp exception.hpp utils.hpp c_syntax.hpp response.hpp server.hpp\
+ startServer.hpp c_client.hpp request_op.hpp
 
 HEADER_PATH = includes/
 

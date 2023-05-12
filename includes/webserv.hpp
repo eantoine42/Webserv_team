@@ -38,9 +38,11 @@
 #include "utils.hpp"
 #include "c_syntax.hpp"
 #include "server.hpp"
+#include "c_client.hpp"
+#include "request_op.hpp"
 
 # define MAX_CLIENT 		128
 # define MAX_EVENTS 		100
-# define BUFFER_SIZE 		4096;
+# define BUFFER_SIZE 		4096
 
 #endif

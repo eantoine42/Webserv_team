@@ -2,40 +2,20 @@
 
 void	start_server(std::map<int, server *> &serverFd)
 {
-	int	epoll_fd = create_epoll(serverFd);
-	struct epoll_event	eventlist[MAX_EVENTS];
+	int cs;
+	struct sockaddr_in csin;
+	unsigned int cslen;
 	std::map<int, ClientInfo> fd_of_clients;
+	std::map<int, server *>::iterator server_it;
+	server_it = serverFd.begin();
 
-	for (;;) // infinite loop for new event
-	{
-		int event_amount = epoll_wait(epoll_fd, eventlist, MAX_EVENTS, -1);
-		if (event_amount == -1)
-			throw(FailToWaitEpoll());
-		for (int i = 0 ; i < event_amount ; ++i)
-		{
-			if ((eventlist[i].events & EPOLLRDHUP)
-				|| (eventlist[i].events & EPOLLHUP)
-				|| (eventlist[i].events & EPOLLERR)) // client quit
-				delete_client_from_epoll(fd_of_clients, epoll_fd, eventlist[i].data.fd);
-			else if (serverFd.find(eventlist[i].data.fd) != serverFd.end()) // event of server means new client connected
-				accept_new_client(epoll_fd, eventlist[i].data.fd, fd_of_clients, serverFd);
-			else if (eventlist[i].events & EPOLLIN) // there is new input from old client
-			{
-				std::map<int, ClientInfo>::iterator it = fd_of_clients.find(eventlist[i].data.fd);
-				if (it == fd_of_clients.end())
-					throw(ClientNotInMap());
-				if (read_request(it) <= 0) // no request sent
-					delete_client_from_epoll(fd_of_clients, epoll_fd, eventlist[i].data.fd);
-				else
-				{
-					deal_with_request(it);
-					delete_client_from_epoll(fd_of_clients, epoll_fd, eventlist[i].data.fd);
-				}
-			}
-			else // Neet to deal with Write Event ?
-			{
-				delete_client_from_epoll(fd_of_clients, epoll_fd, eventlist[i].data.fd);
-			}
-		}
-	}
+	cs = accept(server_it->first, (struct sockaddr *)&csin, &cslen);
+	if (cs != -1)
+		fd_of_clients.insert(std::make_pair(cs, ClientInfo((*(serverFd[server_it->first])))));
+	std::map<int, ClientInfo>::iterator client_it;
+	client_it = fd_of_clients.begin();
+	read_request(client_it);
+	DEBUG_COUT("got from client :" + client_it->second.get_request());
+	close (cs);
 }
+

@@ -3,7 +3,6 @@
 
 # include "webserv.hpp"
 # include "c_debugger.hpp"
-
 class server;
 std::vector<server>	parseConfFile(std::string const &path);
 
