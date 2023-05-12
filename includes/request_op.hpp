@@ -6,5 +6,6 @@
 
 class ClientInfo;
 int	read_request(std::map<int, ClientInfo>::iterator &it);
+int	createEpoll(std::map<int, server *> &serverFd);
 
 #endif

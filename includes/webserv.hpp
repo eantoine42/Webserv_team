@@ -40,6 +40,7 @@
 #include "server.hpp"
 #include "c_client.hpp"
 #include "request_op.hpp"
+#include "startServer.hpp"
 
 # define MAX_CLIENT 		128
 # define MAX_EVENTS 		100

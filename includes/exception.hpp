@@ -139,4 +139,23 @@ class RunServerException : public std::exception
 		}
 };
 
+class epollFail : public std::exception
+{
+	private:
+		std::string	_msg;
+
+	public:
+		epollFail(std::string msg)
+		:	_msg(msg) {}
+
+		~epollFail() throw() {};
+
+		char const	*what() const throw()
+		{
+			std::cerr << "Epoll Error :" << std::endl;
+			return _msg.c_str();
+		}
+};
+
+
 #endif

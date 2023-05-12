@@ -27,7 +27,7 @@ static int	createSocket(server &srv)
 	DEBUG_COUT("Server with file descriptor " <<  socket_fd << " has been successfully bind on port: " << srv.getPort());
 
 	//if (fcntl(socket_fd, F_SETFL, O_NONBLOCK) == -1) //makes the socket nonblock
-  //      throw(SetServerException("Problem setting the socket"));
+    //    throw(SetServerException("Problem setting the socket"));
 	if (listen(socket_fd, MAX_CLIENT))
 		throw(SetServerException("Problem with listen"));
 	

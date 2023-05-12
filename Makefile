@@ -37,7 +37,7 @@ OBJS = $(SRCS:.cpp=.o)
 
 HEADER_FILE = webserv.hpp c_debugger.hpp c_location.hpp c_server.hpp \
  parse_conf.hpp exception.hpp utils.hpp c_syntax.hpp response.hpp server.hpp\
- startServer.hpp c_client.hpp request_op.hpp
+ startServer.hpp c_client.hpp request_op.hpp startServer.hpp
 
 HEADER_PATH = includes/
 
