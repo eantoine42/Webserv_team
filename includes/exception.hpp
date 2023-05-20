@@ -157,5 +157,22 @@ class epollFail : public std::exception
 		}
 };
 
+class FatalError : public std::exception
+{
+	private:
+		std::string	_msg;
+
+	public:
+		FatalError(std::string msg)
+		:	_msg(msg) {}
+
+		~FatalError() throw() {};
+
+		char const	*what() const throw()
+		{
+			std::cerr << "Fatal Error :" << std::endl;
+			return _msg.c_str();
+		}
+};
 
 #endif

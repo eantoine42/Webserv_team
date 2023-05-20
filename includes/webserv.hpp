@@ -30,9 +30,11 @@
 
 
 // *.hpp
+# include "c_autoindex.hpp"
 #include "c_server.hpp"
 #include "c_location.hpp"
 # include "c_debugger.hpp"
+
 #include "parse_conf.hpp"
 #include "exception.hpp"
 #include "utils.hpp"

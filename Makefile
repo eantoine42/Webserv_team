@@ -2,8 +2,8 @@ NAME = webserv
 
 CXX = c++
 COLOR = \0033[1;35m
-
-CXXFLAGS = -Wall -Werror -Wextra -std=c++98  -O3 -fsanitize=address
+#SANIT = -fsanitize=address
+CXXFLAGS = -g -Wall -Werror -Wextra -std=c++98  -O3 $(SANIT)
 #CXXFLAGS = -g -fPIE -std=c++98  -O3  --no-warnings
 
 
@@ -17,7 +17,7 @@ DEBUG_FILE = Debugger.cpp
 
 HTTP_PATH = http/
 
-HTTP_FILE = response.cpp
+HTTP_FILE = response.cpp c_autoindex.cpp
 
 SERVER_PATH = server/
 
@@ -30,14 +30,14 @@ SRCS_FILE = main.cpp utils.cpp
 SRCS_FILE += $(addprefix $(PARSE_CONF_PATH), $(PARSE_CONF_FILE))
 SRCS_FILE += $(addprefix $(DEBUG_PATH), $(DEBUG_FILE))
 SRCS_FILE += $(addprefix $(SERVER_PATH), $(SERVER_FILE))
-
+SRCS_FILE += $(addprefix $(HTTP_PATH), $(HTTP_FILE))
 SRCS = $(addprefix $(SRCS_PATH), $(SRCS_FILE))
 
 OBJS = $(SRCS:.cpp=.o)
 
 HEADER_FILE = webserv.hpp c_debugger.hpp c_location.hpp c_server.hpp \
  parse_conf.hpp exception.hpp utils.hpp c_syntax.hpp response.hpp server.hpp\
- startServer.hpp c_client.hpp request_op.hpp startServer.hpp
+ startServer.hpp c_client.hpp request_op.hpp startServer.hpp c_autoindex.hpp
 
 HEADER_PATH = includes/
 

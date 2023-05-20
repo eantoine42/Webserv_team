@@ -520,3 +520,16 @@ void syntax::fill_response_status_map(std::map<status_code_t, std::string> &map)
 	map.insert(std::pair<status_code_t, std::string>(GATEWAY_TIMEOUT,"Gateway Timeout"));
 	map.insert(std::pair<status_code_t, std::string>(HTTP_VERSION_NOT_SUPPORTED,"HTTP Version Not Supported"));
 }
+
+std::string	syntax::getFormattedDate(std::time_t time)
+{
+    char		date[100];
+	int			ret;
+
+    ret = std::strftime(date, sizeof(date), "%a, %d %b %Y %X GMT", std::localtime(&time));
+	if (!ret)
+	{
+		throw (FatalError("Webserv error: strftime() function failed"));
+	}
+	return(std::string(date));	
+}

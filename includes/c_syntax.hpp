@@ -171,6 +171,8 @@ class syntax {
 		static int 	correctLocationInstruction(std::vector<std::string> token);
 		static int 	correctMethodInstruction(std::vector<std::string> token);
 		static void fill_response_status_map(std::map<status_code_t, std::string> &map);
+		static std::string	getFormattedDate(std::time_t time);
+
 
 	private:
 		syntax(); 

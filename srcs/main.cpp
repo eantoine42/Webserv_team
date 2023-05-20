@@ -19,6 +19,7 @@ static int process_server(std::vector<server> serverlist)
 		// Servers are in a map with socket number as index, ans server as content, ready to go!
 		//startEpollServer(serverFd);
 		startServer(serverFd);
+
 	}
 	catch(const std::exception& e)
 	{
@@ -44,6 +45,8 @@ int     main(int argc, const char **argv) {
         return (printUsage(argv[0]));
     try {
         serverlist = parseConfFile(argv[argc]);
+		autoindex autind("/");
+		std::cout<<autind.getIndexPage()<<std::endl;
 	//	std::cout << serverlist << std::endl;
     }
     catch (const std::exception &e) {
