@@ -3,37 +3,29 @@ NAME = webserv
 CXX = c++
 COLOR = \0033[1;35m
 
-CXXFLAGS = -Wall -Werror -Wextra -std=c++98  -O3 -fsanitize=address
+# CXXFLAGS = -Wall -Werror -Wextra -std=c++98  -O3 -fsanitize=address
+CXXFLAGS = -Wall -Werror -Wextra -std=c++98
 #CXXFLAGS = -g -fPIE -std=c++98  -O3  --no-warnings
 
+# DEBUG_PATH = debug/
 
-PARSE_CONF_PATH = parse_conf/
+# DEBUG_FILE = Debugger.cpp
 
-PARSE_CONF_FILE = c_location.cpp c_server.cpp parse_conf.cpp c_syntax.cpp
-
-DEBUG_PATH = debug/
-
-DEBUG_FILE = Debugger.cpp
-
-HTTP_PATH = http/
-
-HTTP_FILE = response.cpp
+FILE_DESCRIPTOR_SRCS = $(addprefix fileDescriptor/, AFileDescriptor.cpp SocketFd.cpp)
 
 SRCS_PATH = srcs/
 
-SRCS_FILE = main.cpp utils.cpp
+SRCS_FILE = main.cpp Server.cpp Request.cpp Debugger.cpp
 
-SRCS_FILE += $(addprefix $(PARSE_CONF_PATH), $(PARSE_CONF_FILE))
-SRCS_FILE += $(addprefix $(DEBUG_PATH), $(DEBUG_FILE))
+SRCS_FILE += $(FILE_DESCRIPTOR_SRCS)
 
 SRCS = $(addprefix $(SRCS_PATH), $(SRCS_FILE))
 
 OBJS = $(SRCS:.cpp=.o)
 
-HEADER_FILE = webserv.hpp c_debugger.hpp c_location.hpp c_server.hpp \
- parse_conf.hpp exception.hpp utils.hpp c_syntax.hpp response.hpp
-
 HEADER_PATH = includes/
+
+HEADER_FILE = Request.hpp Debugger.hpp AFileDescriptor.hpp Server.hpp SocketFd.hpp
 
 HEADER = $(addprefix $(HEADER_PATH), $(HEADER_FILE))
 
