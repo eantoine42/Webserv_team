@@ -6,7 +6,7 @@
 /*   By: lfrederi <lfrederi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/18 15:44:08 by lfrederi          #+#    #+#             */
-/*   Updated: 2023/05/22 19:17:24 by lfrederi         ###   ########.fr       */
+/*   Updated: 2023/05/22 20:38:24 by lfrederi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int main()
 	int serverFd;
 
 	serverFd = couldFailedAndExit(socket(AF_INET, SOCK_STREAM, 0), "socket");
-	
+
 	bzero(&addr, sizeof(addr));
 	addr.sin_family = AF_INET;
 	addr.sin_port = htons(PORT_LISTEN);
@@ -59,7 +59,7 @@ int main()
 	couldFailedAndExit(listen(serverFd, N_QUEUED), "listen");
 	DEBUG_COUT("Server is listenning on port 18000");
 	// Server ready to listen
-	
+
 	struct epoll_event					ev, events[MAX_FD];
 	int									nfds;
 	std::map<int, Server>				mapServerFd;
@@ -76,28 +76,24 @@ int main()
 	ev.events = EPOLLIN;
 	ev.data.fd = serverFd;
 	couldFailedAndExit(epoll_ctl(g_epollFd, EPOLL_CTL_ADD, serverFd, &ev), "epoll_ctl");
-	
+
 	int j = 0;
 	while (j != 1)
 	{
 		nfds = couldFailedAndExit(epoll_wait(g_epollFd, events, MAX_FD, -1), "epoll_wait");
-
-		/* std::cout << "nfds: " << nfds << std::endl; */
 
 		for (int i = 0; i < nfds; i++)
 		{
 			int			fd = events[i].data.fd;
 			uint32_t	event = events[i].events;
 
-			std::cout << "Fd => " << fd << "| event => " << event << std::endl;
-
-			switch (event)
+			if (mapServerFd.find(fd) != mapServerFd.end())
+				mapServerFd[fd].clientConnect(mapFileDescriptor);
+			else 
 			{
-				case EPOLLIN:
-					if (mapServerFd.find(fd) != mapServerFd.end())
-						mapServerFd[fd].clientConnect(mapFileDescriptor);
-					else
-					{
+				switch (event)
+				{
+					case EPOLLIN:
 						if (mapFileDescriptor[fd]->doOnRead() == Request::requestComplete)
 						{
 							bzero(&ev, sizeof(ev));
@@ -105,25 +101,21 @@ int main()
 							ev.data.fd = fd;
 							couldFailedAndExit(epoll_ctl(g_epollFd, EPOLL_CTL_MOD, fd, &ev), "epoll_ctl");
 						}
-					}
-					break;
-				case EPOLLOUT:
-					mapFileDescriptor[fd]->doOnWrite();
-					close(fd);
-					break;
-				case EPOLLIN | EPOLLOUT:
-					DEBUG_COUT("EPOLLIN | EPOLLOUT");
-					close(fd);
-					break ;
-				default:
-					std::cout << "default => event = " << event;
-					/* DEBUG_COUT("Error"); */
+						break;
+					case EPOLLOUT:
+						mapFileDescriptor[fd]->doOnWrite();
+						close(fd);
+						break;
+					default:
+						std::cout << "default => event = " << event;
+						/* DEBUG_COUT("Error"); */
+				}
 			}
 
 		}
 	}
 	close(g_epollFd);
-	
+
 	for (std::map<int, AFileDescriptor *>::iterator it = mapFileDescriptor.begin(); it != mapFileDescriptor.end(); it++)
 		delete it->second;
 
