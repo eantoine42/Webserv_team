@@ -64,7 +64,6 @@ class   server {
 		std::map<std::string, std::string>	const &getCgi() const;
 		
 		void						setServer(const std::string &str);
-		void 						cleanNames(server &serv2);
 		void 						cleanDupServer(std::vector<server> serverInfo);
 
 		
