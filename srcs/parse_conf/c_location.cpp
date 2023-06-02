@@ -52,7 +52,7 @@ std::vector<std::string>			const &location::getAllowMethod() const{return _allow
 std::string							const &location::getRoot() const{return _root;}
 std::string							const &location::getUploadDir() const{return _upload_dir;}
 std::map<std::string, std::string>	const &location::getCgi() const{return _cgi;}
-int									const &location::getClientBodySize() const{return (_client_body_size);}
+long int							const &location::getClientBodySize() const{return (_client_body_size);}
 std::string							const &location::getError() const{return (_error_pages);}
 
 void	location::setLocation(const std::string &str,  int &count)
@@ -208,8 +208,24 @@ void	location::setClientBodySize(std::vector<std::string> token)
 {
 	if (token.size() > 2)
 		throw(ConfFileParseError("Location bloc [" + syntax::intToString(_loc_index) +"] : Only one client body size max"));
+	std::string str = token[1].erase(token[1].size() - 1);
+	size_t i=0;
+	while (i < str.length() && (std::isspace(str[i]) || std::isdigit(str[i])))
+		i++;
+	if (str.length()!=i && str[i]!='M' && str[i]!='m' && str[i]!='G' && str[i]!='g' && str[i]!='k' && str[i]!='K')
+		throw(ConfFileParseError("error client body size syntax"));
+	if (str.length()!=i && str.length() !=i+1)
+		throw(ConfFileParseError("error client body size syntax"));
 	_client_body_size = atoi(token[1].erase(token[1].size() - 1).c_str());
+	if (str[i] && (str[i]=='M' || str[i]=='m'))
+		_client_body_size *=1000000;
+	else if (str[i] && (str[i]=='G' || str[i]=='g'))
+		_client_body_size *=1000000000;
+	else if (str[i] && (str[i]=='k' || str[i]=='K'))
+		_client_body_size *=1000;
 }
+
+
 void	location::setReturn(std::vector<std::string> token)
 	{
 		if (token.size() == 2)

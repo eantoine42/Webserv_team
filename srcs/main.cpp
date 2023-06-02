@@ -46,7 +46,7 @@ int     main(int argc, const char **argv) {
     try {
         serverlist = parseConfFile(argv[argc]);
 		autoindex autind("/");
-		std::cout<<autind.getIndexPage()<<std::endl;
+	//	std::cout<<autind.getIndexPage()<<std::endl;
 	//	std::cout << serverlist << std::endl;
     }
     catch (const std::exception &e) {

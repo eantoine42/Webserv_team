@@ -20,7 +20,7 @@ class   location {
 		bool								_autoindex;
 		std::string							_upload_dir;
 		std::string							_return;
-		int									_client_body_size;
+		long int							_client_body_size;
 		std::string							_error_pages;
 		std::string							_uri;
 		
@@ -61,7 +61,7 @@ class   location {
 		std::vector<std::string>			const &getAllowMethod() const;
 		std::string							const &getRoot() const;
 		std::string							const &getUploadDir() const;
-		int									const &getClientBodySize() const;
+		long int							const &getClientBodySize() const;
 		std::string							const &getError() const;
 		std::map<std::string, std::string>	const &getCgi() const;
 };
